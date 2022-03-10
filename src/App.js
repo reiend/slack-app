@@ -1,9 +1,9 @@
 import React from "react";
-import HelloWorld from "@components/HelloWorld.jsx";
+import Login from "@components/Login.jsx";
 
 const App = () => {
   return(
-    <HelloWorld/>
+    <Login/>
   )
 };
 
