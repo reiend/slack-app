@@ -1,13 +1,13 @@
 {
-  "homepage": "http://jake-lonceras.github.io/banking-app",
+  "homepage": "http://jake-lonceras.github.io/slack-app",
   "name": "slack-app",
   "version": "1.0.0",
   "description": "",
   "private": "true",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "build": "webpack --config webpack-prod.js",
+    "deploy": "gh-pages -d dist",
+    "build": "webpack --config webpack.prod.js",
     "start": "webpack server --config webpack.dev.js"
   },
   "keywords": [],

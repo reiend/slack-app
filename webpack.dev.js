@@ -76,7 +76,7 @@ module.exports = {
   plugins: [
     // create root html
     new HtmlWebpackPlugin({
-      title: "Hello webpack",
+      title: "Slack app",
       filename: "index.html",
     }),
     // css extractor from js
