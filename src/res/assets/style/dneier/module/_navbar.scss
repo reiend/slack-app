@@ -1,0 +1,36 @@
+@use "../base/variables" as *;
+@use "../placeholder";
+
+%flex-layout {
+  @extend %df; 
+  @extend %jc--sb;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar {
+  @extend %flex-layout;
+  @extend %p0;
+  &__title {
+    @extend %fsz7;
+  }
+  &__body {
+    @extend %box10;
+    @extend %flex-layout;
+  }
+}
+
+@each $key, $value in $colors {
+  .navbar--#{$key} {
+    @extend .navbar;
+    @extend %bg--#{$key};
+  }
+}
+
+@each $key, $value in $colors-modified {
+  .navbar--#{$key} {
+    @extend .navbar;
+    @extend %bg--#{$key};
+  }
+}
+

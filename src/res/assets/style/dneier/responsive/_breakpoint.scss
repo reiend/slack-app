@@ -1,0 +1,76 @@
+@use "sass:math" as *;
+@use "sass:map" as *;
+
+@function toEm($value) {
+  @if $value == 0 {
+    @return 0em;
+  }
+  @return #{div($value, 16)}em;
+}
+
+@function toPx($value) {
+  @if $value == 0 {
+    @return 0px;
+  }
+  @return #{$value}px;
+}
+
+$breakpoint: (
+  "xxs": 0,
+  "xs": 375,
+  "s": 576,
+  "m": 768,
+  "l": 1024,
+  "xl": 1200,
+  "xxl": 1440,
+  "xxxl": 1980,
+);
+
+@mixin xxs() {
+  @media screen and (min-width: toEm(get($breakpoint, "xxs"))) {
+    @content;
+  }
+}
+
+@mixin xs() {
+  @media screen and (min-width: toEm(get($breakpoint, "xs"))) {
+    @content;
+  }
+}
+
+@mixin s() {
+  @media screen and (min-width: toEm(get($breakpoint, "s"))) {
+    @content;
+  }
+}
+
+@mixin m() {
+  @media screen and (min-width: toEm(get($breakpoint, "m"))) {
+    @content;
+  }
+}
+
+@mixin l() {
+  @media screen and (min-width: toEm(get($breakpoint, "l"))) {
+    @content;
+  }
+}
+
+@mixin xl() {
+  @media screen and (min-width: toEm(get($breakpoint, "xl"))) {
+    @content;
+  }
+}
+
+@mixin xxl() {
+  @media screen and (min-width: toEm(get($breakpoint, "xxl"))) {
+    @content;
+  }
+}
+
+@mixin breakAt($px: 0) {
+  @media screen and (min-width: toEm($px)) {
+    @content;
+  }
+}
+

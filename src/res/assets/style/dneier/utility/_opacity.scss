@@ -1,0 +1,19 @@
+@use "../base/variables" as *;
+@use "sass:map" as *;
+@use "sass:math" as *;
+@use "../responsive/breakpoint" as *;
+@use "../placeholder";
+
+@for $i from 1 through 10 {
+  .O#{$i} {
+    opacity: $i * 0.1;
+  }
+
+  @include m {
+    .m_-O#{$i} {
+      opacity: $i * 0.1;
+    }
+  }
+
+}
+

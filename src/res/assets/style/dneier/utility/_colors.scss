@@ -1,0 +1,30 @@
+@use "../base/variables" as *;
+
+/* lighness and darkness of colors for background-color and text-color */
+@each $key, $value in $colors-modified {
+  .txt--#{$key},
+  .txt-_onH--#{$key}:hover {
+    color: $value;
+  }
+  .bg--#{$key},
+  .bg-_onH--#{$key}:hover {
+    background-color: $value;
+  }
+}
+
+/* base colors */
+@each $key, $value in $colors {
+  .txt--#{$key} {
+    color: $value;
+    &:hover {
+      color: $value;
+    }
+  }
+
+  .bg--#{$key} {
+    background-color: $value;
+    &:hover {
+      background-color: $value;
+    }
+  }
+}

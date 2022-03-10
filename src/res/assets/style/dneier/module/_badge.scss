@@ -1,0 +1,73 @@
+@use "../base/variables" as *;
+@use "../placeholder";
+@use "sass:color" as *;
+
+%bdg-common {
+  @extend %dib;
+  @extend %dib;
+  @extend %fsz2;
+  @extend %br2;
+  @extend %px2;
+  @extend %py1;
+  text-align: center;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin bdg($bg-color: $white) {
+  @extend %bdg-common;
+  background-color: $bg-color;
+};
+
+@mixin bdg--sld($value, $color) {
+  @include bdg($value);
+  @if $value == $white {
+    color: $black;
+    background-color: $white;
+  } @else {
+    color: $white;
+  }
+}
+
+@mixin bdg--outL($value, $color) {
+  @include bdg($color);
+  @if $value == $white {
+    border: $base-border-thickness solid mix($black, $value, $colorDarkness);
+  } @else {
+    color: $value;
+    border: $base-border-thickness solid $value;
+  }
+}
+
+@each $key, $value in $colors {
+  .bdg--sld-#{$key} {
+    @include bdg--sld($value, $white); 
+  }
+
+  .bdg--outL-#{$key} {
+    @include bdg--outL($value, $white);
+  }
+}
+
+@each $key, $value in $colors-modified {
+  .bdg--sld-#{$key} {
+    @include bdg--sld($value, $white); 
+  }
+
+  .bdg--outL-#{$key} {
+    @include bdg--outL($value, $white);
+  }
+}
+
+.bdg--sld {
+  @extend .bdg--sld-white;
+}
+
+.bdg--outL {
+  @extend .bdg--outL-white;
+}
+
+.bdg {
+  @extend .bdg--outL-white;
+}

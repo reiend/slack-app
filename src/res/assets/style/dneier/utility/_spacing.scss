@@ -1,0 +1,315 @@
+@use "../responsive/breakpoint" as *;
+@use "../base/variables" as *;
+@use "sass:map" as *;
+@use "sass:math" as *;
+
+@mixin responsive-spacing-x($size, $key, $value, $base-space, $i) {
+  .#{$size}_-#{$key}#{$i} {
+    #{$value}-left: ($base-space * $i);
+    #{$value}-right: ($base-space * $i);
+  }
+}
+
+@mixin responsive-spacing-y($size, $key, $value, $base-space, $i) {
+  .#{$size}_-#{$key}#{$i} {
+    #{$value}-top: ($base-space * $i);
+    #{$value}-bottom: ($base-space * $i);
+  }
+}
+
+@mixin responsive-spacing($size, $key, $value, $base-space, $i) {
+  .#{$size}_-#{$key}#{$i} {
+    #{$value}: ($base-space * $i);
+  }
+}
+
+@mixin create-spacing-class($key, $value, $base-space) {
+  @for $i from 0 through 100 {
+    @if ($key == "mx") or ($key == "px") {
+      .#{$key}#{$i} {
+        #{$value}-left: ($base-space * $i);
+        #{$value}-right: ($base-space * $i);
+      }
+
+      @include xxs {
+        @include responsive-spacing-x("xxs", $key, $value, $base-space, $i)
+      }
+
+      @include xs {
+        @include responsive-spacing-x("xs", $key, $value, $base-space, $i)
+      }
+
+      @include s {
+        @include responsive-spacing-x("s", $key, $value, $base-space, $i)
+      }
+
+      @include m {
+        @include responsive-spacing-x("m", $key, $value, $base-space, $i)
+      }
+
+      @include l {
+        @include responsive-spacing-x("l", $key, $value, $base-space, $i)
+      }
+
+      @include xl{
+        @include responsive-spacing-x("xl", $key, $value, $base-space, $i)
+      }
+
+      @include xxl{
+        @include responsive-spacing-x("xxl", $key, $value, $base-space, $i)
+      }
+
+    }
+    @else if ($key == "my") or ($key == "py") {
+      .#{$key}#{$i} {
+        #{$value}-top: ($base-space * $i);
+        #{$value}-bottom: ($base-space * $i);
+      }
+
+      @include xxs {
+        @include responsive-spacing-y("xxs", $key, $value, $base-space, $i)
+      }
+
+      @include xs {
+        @include responsive-spacing-y("xs", $key, $value, $base-space, $i)
+      }
+
+      @include s {
+        @include responsive-spacing-y("s", $key, $value, $base-space, $i)
+      }
+
+      @include m {
+        @include responsive-spacing-y("m", $key, $value, $base-space, $i)
+      }
+
+      @include l {
+        @include responsive-spacing-y("l", $key, $value, $base-space, $i)
+      }
+
+      @include xl{
+        @include responsive-spacing-y("xl", $key, $value, $base-space, $i)
+      }
+
+      @include xxl{
+        @include responsive-spacing-y("xxl", $key, $value, $base-space, $i)
+      }
+
+    }
+    @else {
+      .#{$key}#{$i} {
+        #{$value}: ($base-space * $i);
+      }
+
+      @include xxs {
+        @include responsive-spacing("xxs", $key, $value, $base-space, $i);
+      }
+
+      @include xs {
+        @include responsive-spacing("xs", $key, $value, $base-space, $i);
+      }
+
+      @include s {
+        @include responsive-spacing("s", $key, $value, $base-space, $i);
+      }
+
+      @include m {
+        @include responsive-spacing("m", $key, $value, $base-space, $i);
+      }
+
+      @include l {
+        @include responsive-spacing("l", $key, $value, $base-space, $i);
+      }
+
+      @include xl{
+        @include responsive-spacing("xl", $key, $value, $base-space, $i);
+      }
+
+      @include xxl{
+        @include responsive-spacing("xxl", $key, $value, $base-space, $i);
+      }
+    }
+
+  }
+}
+
+@mixin responsive-spacing-x-auto($size, $key, $value) {
+  .#{$size}_-#{$key} {
+    #{$value}-left: auto;
+    #{$value}-right: auto;
+  }
+}
+
+@mixin responsive-spacing-y-auto($size, $key, $value) {
+  .#{$size}_-#{$key} {
+    #{$value}-top: auto;
+    #{$value}-bottom: auto;
+  }
+}
+
+@mixin responsive-spacing-auto($size, $key, $value) {
+  .#{$size}_-#{$key} {
+    #{$value}: auto;
+  }
+}
+
+@mixin create-spacing-auto-class($key, $value) {
+  @if ($key == "mx-auto") or ($key == "px-auto") {
+    .#{$key} {
+      #{$value}-left: auto;
+      #{$value}-right: auto;
+    }
+
+    @include xxs {
+      @include responsive-spacing-x-Auto("xxs", $key, $value);
+    }
+
+    @include xs {
+      @include responsive-spacing-x-Auto("xs", $key, $value);
+    }
+
+    @include s {
+      @include responsive-spacing-x-Auto("s", $key, $value);
+    }
+
+    @include m {
+      @include responsive-spacing-x-Auto("m", $key, $value);
+    }
+
+    @include l {
+      @include responsive-spacing-x-Auto("l", $key, $value);
+    }
+
+    @include xl{
+      @include responsive-spacing-x-Auto("xl", $key, $value);
+    }
+
+    @include xxl{
+      @include responsive-spacing-x-Auto("xxl", $key, $value);
+    }
+  }
+  @else if ($key == "my-auto") or ($key == "py-auto") {
+    .#{$key} {
+      #{$value}-top: auto;
+      #{$value}-bottom: auto;
+    }
+
+    @include xxs {
+      @include responsive-spacing-y-auto("xxs", $key, $value);
+    }
+
+    @include xs {
+      @include responsive-spacing-y-auto("xs", $key, $value);
+    }
+
+    @include s {
+      @include responsive-spacing-y-auto("s", $key, $value);
+    }
+
+    @include m {
+      @include responsive-spacing-y-auto("m", $key, $value);
+    }
+
+    @include l {
+      @include responsive-spacing-y-auto("l", $key, $value);
+    }
+
+    @include xl{
+      @include responsive-spacing-y-auto("xl", $key, $value);
+    }
+
+    @include xxl{
+      @include responsive-spacing-y-auto("xxl", $key, $value);
+    }
+  }
+  @else {
+    .#{$key} {
+      #{$value}: auto;
+    }
+
+    @include xxs {
+      @include responsive-spacing-auto("xxs", $key, $value);
+    }
+
+    @include xs {
+      @include responsive-spacing-auto("xs", $key, $value);
+    }
+
+    @include s {
+      @include responsive-spacing-auto("s", $key, $value);
+    }
+
+    @include m {
+      @include responsive-spacing-auto("m", $key, $value);
+    }
+
+    @include l {
+      @include responsive-spacing-auto("l", $key, $value);
+    }
+
+    @include xl{
+      @include responsive-spacing-auto("xl", $key, $value);
+    }
+
+    @include xxl{
+      @include responsive-spacing-auto("xxl", $key, $value);
+    }
+  }
+
+}
+
+$margin: (
+  "m": "margin",
+  "mx": "margin",
+  "my": "margin",
+  "mt": "margin-top",
+  "mr": "margin-right",
+  "mb": "margin-bottom",
+  "ml": "margin-left",
+);
+
+@each $key, $value in $margin {
+  @include create-spacing-class($key, $value, $base-margin);
+}
+
+$margin-auto: (
+  "m--auto": "margin",
+  "mx--auto": "margin",
+  "my--auto": "margin",
+  "mt--auto": "margin-top",
+  "mr--auto": "margin-right",
+  "mb--auto": "margin-bottom",
+  "ml--auto": "margin-left",
+);
+
+@each $key, $value in $margin-auto {
+  @include create-spacing-auto-class($key, $value);
+}
+
+$padding: (
+  "p": "padding",
+  "px": "padding",
+  "py": "padding",
+  "pt": "padding-top",
+  "pr": "padding-right",
+  "pb": "padding-bottom",
+  "pl": "padding-left",
+);
+
+@each $key, $value in $padding {
+  @include create-spacing-class($key, $value, $base-padding);
+}
+
+$padding-auto: (
+  "p--auto": "padding",
+  "px--auto": "padding",
+  "py--auto": "padding",
+  "pt--auto": "padding-top",
+  "pr--auto": "padding-right",
+  "pb--auto": "padding-bottom",
+  "pl--auto": "padding-left",
+);
+
+@each $key, $value in $padding-auto {
+  @include create-spacing-auto-class($key, $value);
+}
+

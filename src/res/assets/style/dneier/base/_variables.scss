@@ -1,0 +1,81 @@
+@use "sass:map" as *;
+@use "sass:color" as *;
+
+/* colors */ 
+$blue: #1F8FFF;
+$green: #1AC880;
+$yellow: #F7BF26;
+$red: #F2003C;
+$gray: #6699CC;
+$purple: #A020F0;
+$orange: #FA5B3D;
+$brown: #AD5D4E;
+$violet: #8F00FF;
+$teal: #008080;
+$white: #F8F8FF;
+$black: #100C08;
+
+/* gist */
+/* map-get(obj, key) */
+/* map-has-key(obj, key) */
+/* map-remove(obj, key) */
+/* map-merge(obj, (key: value)) */
+
+$colorLightness: 5%;
+$colorDarkness: 5%;
+
+$colors: (
+  "blue": $blue,
+  "green": $green,
+  "yellow": $yellow,
+  "red": $red,
+  "gray": $gray,
+  "purple": $purple,
+  "orange": $orange,
+  "brown": $brown,
+  "violet": $violet,
+  "teal": $teal,
+  "white": $white,
+  "black": $black,
+);
+
+$colors-modified: ();
+
+/* generate lighness and darkness of colors base on the base  */
+@each $key, $value in $colors {
+  @for $i from 1 through 10 {
+    @if $value != $white {
+      $colors-modified: merge(
+        $colors-modified, 
+        (#{$key}-L#{$i}: mix($white, $value, $i * $colorLightness))
+      );
+    }
+    @if $value != $black {
+      $colors-modified: merge(
+        $colors-modified, 
+        (#{$key}-D#{$i}: mix($black, $value, $i * $colorDarkness))
+      );
+    }
+  }
+}
+
+/* spacing */
+$base-padding: 0.5rem;
+$base-margin: 0.5rem;
+$base-margin-fr: 10%;
+
+/* border */
+$base-border-color: #dadce0;
+$base-border-radius: 2.5px;
+$base-border-thickness: 0.1rem;
+$base-border-style: solid;
+
+/* box-shadows */
+$base-box-shadow: 0 0.1rem 0.2rem 0 #33333388, 0 0.2rem 0.6rem 0.2rem #33333355;
+
+/* fonts */
+$base-font-size: 1.6rem;
+
+/* layout box */
+$box-column: 10;
+

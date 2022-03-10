@@ -1,0 +1,289 @@
+@use "../responsive/breakpoint" as *;
+@use "../base/variables" as *;
+@use "sass:math" as *;
+@use "sass:map" as *;
+@use "../placeholder";
+@use "display";
+
+@function getBoxWidth($minSize, $maxSize, $threshold) {
+  @return clamp(
+    toPx(get($breakpoint, $minSize)),
+    $threshold,
+    toPx(get($breakpoint, $maxSize))
+  );
+}
+
+@mixin responsiveBoxCover($boxSize) {
+  .#{$boxSize}_-box--cvr {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 100%;
+  }
+}
+
+@mixin responsiveColumn($size) {
+  @for $i from 1 through $box-column {
+    .#{$size}_-col#{$i} {
+      width: div($i * 100%, $box-column);
+      box-sizing: border-box;
+    }
+  }
+}
+
+@for $i from 0 through 10{
+  $threshold: $i + 90%;
+  .box#{$i} {
+    flex: 1 0 0;
+    @extend %mx--auto;
+    @extend %px4;
+    width: 100%;
+
+    @include xxs {
+      max-width: getBoxWidth("xxs", "xs", $threshold);
+    }
+
+    @include xs {
+      max-width: getBoxWidth("xs", "s", $threshold);
+    }
+
+    @include s {
+      max-width: getBoxWidth("s", "m", $threshold);
+    }
+    @include m {
+      max-width: getBoxWidth("m", "l", $threshold);
+    }
+
+    @include l {
+      max-width: getBoxWidth("l", "xl", $threshold);
+    }
+
+    @include xl {
+      max-width: getBoxWidth("xl", "xxl", $threshold);
+    }
+
+    @include xxl {
+      max-width: getBoxWidth("xxl", "xxxl", $threshold);
+    }
+  }
+
+}
+
+.box--cvr {
+  min-width: 100%;
+}
+
+.box {
+  @extend .box10;
+}
+
+@for $i from 0 through 10{
+  $threshold: $i + 90%;
+
+  @include xxs {
+    .xxs_-box#{$i} {
+      max-width: getBoxWidth("xxs", "xs", $threshold);
+    }
+  }
+
+  @include xs {
+    .xs_-box#{$i} {
+      max-width: getBoxWidth("xs", "s", $threshold);
+    }
+  }
+
+  @include s {
+    .s_-box#{$i} {
+      max-width: getBoxWidth("s", "m", $threshold);
+    }
+  }
+
+
+  @include m {
+    .m_-box#{$i} {
+      max-width: getBoxWidth("m", "l", $threshold);
+    }
+  }
+
+  @include l {
+    .l_-box#{$i} {
+      max-width: getBoxWidth("l", "xl", $threshold);
+    }
+  }
+
+  @include xl {
+    .xl_-box#{$i} {
+      max-width: getBoxWidth("lx", "xxl", $threshold);
+    }
+  }
+
+  @include xxl {
+    .xxl_-box#{$i} {
+      max-width: getBoxWidth("xxl", "xxxl", $threshold);
+    }
+  }
+
+}
+
+.row {
+  @extend %df;
+  flex-wrap: wrap;
+}
+/* gap for flex */
+@for $i from 1 through 5 {
+  .gapF#{$i} > * {
+    padding: $i * 1rem;
+  }
+}
+
+.gapF--none > * {
+  padding: 0;
+}
+
+@include xxs {
+  @include responsiveBoxCover("xxs");
+  @include responsiveColumn("xxs");
+  .xxs_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .xxs_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include xs {
+  @include responsiveBoxCover("xs");
+  @include responsiveColumn("xs");
+  .xs_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .xs_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include s {
+  @include responsiveBoxCover("s");
+  @include responsiveColumn("s");
+  .s_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .s_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include m {
+  @include responsiveBoxCover("m");
+  @include responsiveColumn("m");
+  .m_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .m_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include l {
+  @include responsiveBoxCover("l");
+  @include responsiveColumn("l");
+  .l_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .l_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include xl {
+  @include responsiveBoxCover("xl");
+  @include responsiveColumn("xl");
+  .xl_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .xl_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+@include xxl {
+  @include responsiveBoxCover("xxl");
+  @include responsiveColumn("xxl");
+  .xxl_-gapF--none > * {
+    padding: 0;
+  }
+  @for $i from 1 through 5 {
+    .xxl_-gapF#{$i} > * {
+      padding: $i * 1rem;
+    }
+  }
+}
+
+
+$display-layout: (
+  jc--fs: flex-start,
+  jc--fe: flex-end,
+  jc--c: center,
+  jc--se: space-evenly,
+  jc--sa: space-around,
+  jc--sb: space-between,
+);
+
+@each $key, $value in $display-layout {
+  .#{$key} {
+    justify-content: $value;
+  }
+  @include xxs {
+    .xxs_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include xs {
+    .xs_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include s {
+    .s_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include m {
+    .m_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include l {
+    .l_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include xl {
+    .xl_-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include xxl {
+    .xxl_-#{$key} {
+      justify-content: $value;
+    }
+  }
+}
+

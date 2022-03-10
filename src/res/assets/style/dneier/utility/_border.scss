@@ -1,0 +1,13 @@
+@use "../base/variables" as *;
+@use "sass:map" as *;
+@use "sass:math" as *;
+
+.brFull {
+  border-radius: 50%;
+}
+@for $i from 1 through 10 {
+  .br#{$i} {
+    border-radius: $base-border-radius * $i;
+  }
+}
+
