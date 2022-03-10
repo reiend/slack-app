@@ -9,7 +9,7 @@ const ROOT_PATH = {
 }
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: "./src/index.js",
 
   output:   {
@@ -50,14 +50,14 @@ module.exports = {
       }, 
       {
         // transpiler
-        test: /\.m?js$/,
+        test: /\.m?(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
       },
       //  pulling assets
       {
@@ -81,7 +81,7 @@ module.exports = {
     }),
     // css extractor from js
     new MinicssExtractPlugin({
-      filename: "[name][contenthash].bundle.css",
+      filename: "[name].bundle.css",
     }),
     // unused style clean up
     new PurgecssPlugin({
@@ -94,6 +94,7 @@ module.exports = {
       directory: path.join(__dirname, "dist"),
     },
     open: true,
+    hot: true,
     compress: true,
     port: 9000,
   }
