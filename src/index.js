@@ -1,5 +1,6 @@
 import NanaMourisan from "@images/nana-san.jfif";
-import "./index.scss";
+import { helloWorld } from "@components/helloworld";
+import "./index.scss"
 
 const helloWebpack = () => {
   const element = document.createElement("h1");
@@ -44,6 +45,9 @@ const helloWebpack = () => {
   document.body.style.backgroundPosition = `center`;
   document.body.style.backgroundRepeat = `no-repeat`;
   document.body.appendChild(card);
+
 };
 
+
+helloWorld();
 helloWebpack();

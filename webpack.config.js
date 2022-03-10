@@ -5,17 +5,24 @@ const MinicssExtractPlugin = require("mini-css-extract-plugin")   /* extracting 
 const PurgecssPlugin = require('purgecss-webpack-plugin')         /* for cleaning unused style */
 
 const ROOT_PATH = {
-  src: path.resolve(__dirname, 'src')
+  src: path.resolve(__dirname, `src`)
 }
 
 module.exports = {
   mode: "production",
   entry: "./src/index.js",
+
+  output:   {
+    filename: "[name][contenthash].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+
   resolve: {
     // for shorten imports
     alias: {
       // default root 
-      "@": path.join(__dirname, "./src"),
+      "@components": `${ROOT_PATH.src}/res/components`,
 
       // for styles 
       "@dneier": `${ROOT_PATH.src}/res/assets/style/dneier/index.scss`,
@@ -26,12 +33,6 @@ module.exports = {
       // resolve naming conflicts using its file extention
       extensions: ['.jsx', '.js', '.json', "..."], /* ... use default extention */
     }
-  },
-  
-  output:   {
-    filename: "[name][contenthash].bundle.js",
-    path: path.resolve(__dirname, "./dist"),
-    clean: true,
   },
 
   module: {
@@ -71,11 +72,12 @@ module.exports = {
       },
     ]
   },
+
   plugins: [
     // create root html
     new HtmlWebpackPlugin({
       title: "Hello webpack",
-      filename: "[name][contenthash].bundle.html",
+      filename: "index.html",
     }),
     // css extractor from js
     new MinicssExtractPlugin({
@@ -85,7 +87,15 @@ module.exports = {
     new PurgecssPlugin({
       paths: glob.sync(`${ROOT_PATH.src}/**/*`, {nodir: true}),
     })
-
   ],
+
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    open: true,
+    compress: true,
+    port: 9000,
+  }
 }
 
