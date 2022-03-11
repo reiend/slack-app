@@ -23,6 +23,10 @@ module.exports = {
     alias: {
       // default root 
       "@components": `${ROOT_PATH.src}/res/components`,
+      
+      // for styling
+      "@reiend/quirk": `@reiend/quirk/index.scss`,
+
 
       // assets
       "@images": `${ROOT_PATH.src}/res/assets/images`,
