@@ -24,9 +24,6 @@ module.exports = {
       // default root 
       "@components": `${ROOT_PATH.src}/res/components`,
 
-      // for styles 
-      "@dneier": `${ROOT_PATH.src}/res/assets/style/dneier/index.scss`,
-
       // assets
       "@images": `${ROOT_PATH.src}/res/assets/images`,
 
