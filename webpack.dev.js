@@ -21,11 +21,24 @@ module.exports = {
   resolve: {
     // for shorten imports
     alias: {
-      // default root 
+
+      // res root 
+      "@src": `${ROOT_PATH.src}`,
+
+      // res root 
+      "@res": `${ROOT_PATH.src}/res`,
+
+      // components root 
       "@components": `${ROOT_PATH.src}/res/components`,
+
+      // routers root 
+      "@routers": `${ROOT_PATH.src}/res/components/routers`,
       
       // for styling
       "@reiend/quirk": `@reiend/quirk/index.scss`,
+
+      // for styling
+      "@reiend/quirk/responsive": `@reiend/quirk/responsive`,
 
       // assets
       "@images": `${ROOT_PATH.src}/res/assets/images`,

@@ -1,0 +1,13 @@
+@import "~@reiend/quirk";
+
+.link {
+  @extend .txt-_onH--blue-L5;
+  text-decoration: none;
+  color: black;
+}
+
+.invoices-links {
+  display: flex;
+  flex-direction: column;
+}
+
