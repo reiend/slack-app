@@ -1,6 +1,6 @@
 import React from "react";
 
-const ChatCloudLogin = (props) => {
+const ChatCloudSignin = (props) => {
   return (
     <svg
       width="77"
@@ -38,4 +38,4 @@ const ChatCloudLogin = (props) => {
   );
 };
 
-export default ChatCloudLogin;
+export default ChatCloudSignin;

@@ -1,0 +1,19 @@
+import React from "react";
+
+const ChatCloudTailSignup = (props) => {
+  return (
+    <svg
+      width="38"
+      height="41"
+      viewBox="0 0 38 41"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path d="M0 0H38L21.2353 18.7174L0 41V0Z" fill="#3BCF93" />
+    </svg>
+  );
+};
+
+export default ChatCloudTailSignup;
+
