@@ -8,6 +8,7 @@ const Signin = () => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
   const [hasInputPassword, setHasInputPassword] = useState(false);
 
+  // Input placeholder animation when focus
   const onChangeInput = (event) => {
     const target = event.target;
     if (target.name === "email") {
