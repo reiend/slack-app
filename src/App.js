@@ -1,11 +1,13 @@
 import React from "react";
+import Signin from "@components/Signin.jsx";
+import "./App.scss";
 
 const App = () => {
-  return(
+  return (
     <div>
-        {/* @here */}
+      <Signin/>
     </div>
-  )
+  );
 };
 
 export default App;
