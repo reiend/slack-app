@@ -41,30 +41,56 @@
   @extend .card;
   @extend .br5;
   align-items: center;
-  width: 60%;
   @extend .bg--green-L10;
   border: none;
   box-shadow: none;
   filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.25));
   height: auto;
   justify-content: space-around;
+  @include s {
+    width: 100%;
+  }
+  @include xl {
+    width: 60%;
+  }
 }
 
 .usapp-logo {
-  width: clamp(100px, 70%, 400px);
-  height: clamp(100px, 70%, 200px);
+  @include xxs {
+    width: clamp(100px, 70%, 200px);
+    height: clamp(100px, 70%, 50px);
+  }
+
+  @include l {
+    width: clamp(100px, 70%, 400px);
+    height: clamp(100px, 70%, 200px);
+  }
 }
 
-
 .chat-cloud-signin {
-  width: clamp(100px, 70%, 400px);
-  height: clamp(100px, 70%, 400px);
+  @include xxs {
+    width: clamp(100px, 70%, 200px);
+    height: clamp(100px, 70%, 200px);
+  }
+
+  @include l {
+    width: clamp(100px, 70%, 400px);
+    height: clamp(100px, 70%, 400px);
+  }
 }
 
 .signin-heading {
-  @extend .fsz4;
+  /* @extend .fsz4; */
+  font-size: clamp(2rem, 3vw, 4rem);
   @extend .txt--green-L3;
   @extend .mb5;
+  @include xxs {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  @include l {
+    margin-top: 0;
+  }
 }
 
 .signin-btn {
