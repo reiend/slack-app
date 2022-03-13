@@ -5,8 +5,8 @@ import Signup from "@components/Signup.jsx";
 const App = () => {
   return (
     <div>
-      {/* <Signin/> */}
-      <Signup/>
+      <Signin/>
+      {/* <Signup/> */}
     </div>
   );
 };

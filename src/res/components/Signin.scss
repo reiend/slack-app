@@ -9,6 +9,16 @@
 
 .signin {
   @extend .box1;
+  @include xxs {
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+  }
+
+  @include xs {
+    min-width: 90%;
+  }
+
   @extend .row;
   @extend %absolute-center;
   transform: translate(-50%, -50%);
@@ -82,7 +92,7 @@
 
 .signin-heading {
   /* @extend .fsz4; */
-  font-size: clamp(2rem, 3vw, 4rem);
+  font-size: clamp(1.2rem, 3vw, 4rem);
   @extend .txt--green-L3;
   @extend .mb5;
   @include xxs {
