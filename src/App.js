@@ -1,11 +1,14 @@
 import React from "react";
+import Signin from "@components/Signin.jsx";
+import Signup from "@components/Signup.jsx";
 
 const App = () => {
-  return(
+  return (
     <div>
-        {/* @here */}
+      {/* <Signin/> */}
+      {/* <Signup/> */}
     </div>
-  )
+  );
 };
 
 export default App;

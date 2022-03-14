@@ -8,6 +8,10 @@ const ROOT_PATH = {
   src: path.resolve(__dirname, `src`)
 }
 
+const ASSET_PATH = {
+  assets: path.resolve(__dirname, `assets`)
+};
+
 module.exports = {
   mode: "production",
   entry: "./src/index.js",
@@ -21,15 +25,20 @@ module.exports = {
   resolve: {
     // for shorten imports
     alias: {
-      // default root 
+      // components root 
       "@components": `${ROOT_PATH.src}/res/components`,
+
+      // globals root 
+      "@globals": `${ROOT_PATH.src}/res/globals`,
       
-      // for styling
+      // svgs root 
+      "@svg": `${ROOT_PATH.src}/res/globals/svg`,
+
+      // styling root
       "@reiend/quirk": `@reiend/quirk/index.scss`,
 
-
-      // assets
-      "@images": `${ROOT_PATH.src}/res/assets/images`,
+      // assets root
+      "@assets": `${ASSET_PATH.assets}`,
 
       // resolve naming conflicts using its file extention
       extensions: ['.jsx', '.js', '.json', "..."], /* ... use default extention */

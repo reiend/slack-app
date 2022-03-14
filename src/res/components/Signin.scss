@@ -1,0 +1,157 @@
+@import "~@reiend/quirk";
+
+%absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.signin {
+  @extend .box1;
+  @include xxs {
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+  }
+
+  @include xs {
+    min-width: 90%;
+  }
+
+  @extend .row;
+  @extend %absolute-center;
+  transform: translate(-50%, -50%);
+}
+
+%display-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-column {
+  @extend %display-column;
+  @extend .xxs_-col10;
+  @extend .m_-col5;
+  align-items: center;
+  justify-content: center;
+}
+
+.right-column {
+  display: flex;
+  @extend .xxs_-col10;
+  @extend .m_-col5;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form-login {
+  @extend %display-column;
+  @extend .row;
+  @extend .card;
+  @extend .br5;
+  align-items: center;
+  @extend .bg--green-L10;
+  border: none;
+  box-shadow: none;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.25));
+  height: auto;
+  justify-content: space-around;
+  @include s {
+    width: 100%;
+  }
+  @include xl {
+    width: 60%;
+  }
+}
+
+.usapp-logo {
+  @include xxs {
+    width: clamp(100px, 70%, 200px);
+    height: clamp(100px, 70%, 50px);
+  }
+
+  @include l {
+    width: clamp(100px, 70%, 400px);
+    height: clamp(100px, 70%, 200px);
+  }
+}
+
+.chat-cloud-signin {
+  @include xxs {
+    width: clamp(100px, 70%, 200px);
+    height: clamp(100px, 70%, 200px);
+  }
+
+  @include l {
+    width: clamp(100px, 70%, 400px);
+    height: clamp(100px, 70%, 400px);
+  }
+}
+
+.signin-heading {
+  /* @extend .fsz4; */
+  font-size: clamp(1.2rem, 3vw, 4rem);
+  @extend .txt--green-L3;
+  @extend .mb5;
+  @include xxs {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  @include l {
+    margin-top: 0;
+  }
+}
+
+.signin-btn {
+  @extend .btn--sld-green-L3;
+  @extend .br2;
+  @extend .xxs_-col10;
+  @extend .my3;
+}
+
+.email-input, .password-input {
+  @extend .xxs_-col10;
+  @extend .my3;
+  position: relative;
+}
+
+%label-transition {
+  transition: 100ms ease-in;
+}
+
+.email-label {
+  @extend %absolute-center;
+  @extend %label-transition;
+  @extend .txt--green-L3;
+  left: 2rem;
+}
+ .password-label {
+  @extend %absolute-center;
+  @extend %label-transition;
+  @extend .txt--green-L3;
+  left: 3rem;
+ }
+
+#email, #password {
+  @extend .p2;
+  @extend .br2;
+  @extend .fsz2;
+  border: none;
+  outline: none;
+  width: inherit;
+}
+
+.input-focus-email, .input-focus-password {
+  transform: translate(-50%, -60px);
+  @extend .txt--white;
+}
+
+.input-focus-email {
+  left: 1rem;
+}
+
+.input-focus-password {
+  left: 2rem;
+}

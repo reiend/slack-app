@@ -1,0 +1,187 @@
+@import "~@reiend/quirk";
+
+.signup {
+  @extend .box2;
+  position: absolute;
+  @include xxs {
+    top: 50%;
+    margin: 0;
+    padding: 0;
+    min-width: 100%;
+  }
+  @include s {
+    top: 45%;
+  }
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  height: auto;
+  max-height: 700px;
+}
+
+.usapp-logo-signup {
+  width: clamp(100px, 100%, 300px);
+  height: clamp(100px, 100%, 150px);
+}
+
+.signup-heading {
+  @extend .mt5;
+  @extend .txt--green-L3;
+  font-size: clamp(1.5rem, 5vw, 1.8rem);
+  font-weight: 400;
+}
+
+.form-signup {
+  @extend .mt5;
+  @extend .row;
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+  justify-content: space-between;
+  @include xxs{
+    background-color: #3bcf93;
+    padding: 2rem;
+    border-radius: 10px;
+  }
+
+  @include s {
+    background: none;
+  }
+}
+
+
+.firstname {
+  @extend .xxs_-col10;
+  @extend .s_-col4;
+  @extend .my2;
+}
+
+.lastname {
+  @extend .xxs_-col10;
+  @extend .s_-col4;
+  @extend .my2;
+}
+
+.email-signup {
+  @extend .xxs_-col10;
+  @extend .s_-col10;
+  @extend .my2;
+}
+
+.password-signup {
+  @extend .xxs_-col10;
+  @extend .s_-col4;
+  @extend .my2;
+}
+
+.password-retype {
+  @extend .xxs_-col10;
+  @extend .s_-col4;
+  @extend .my2;
+}
+
+.signup-btn {
+  @extend .s_-col4;
+  @extend .btn--outL-white;
+  @extend .txt--green-L3;
+  @extend .py1;
+  @extend .px2;
+  @extend .mt4;
+  margin: 3rem auto 0 auto;
+}
+
+#firstname,
+#lastname,
+#password-retype,
+#email-signup,
+#password-signup {
+  width: 100%;
+  @extend .p1;
+  @extend .br2;
+  border: none;
+}
+
+.chat-cloud-signup {
+  position: absolute;
+  z-index: -1;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.25));
+
+  @include xxs {
+    display: none;
+  }
+
+  @include s {
+    display: block;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%) scaleY(0.85);
+    width: clamp(100px, 110%, 600px);
+    height: clamp(100px, 110%, 600px);
+  }
+}
+
+.firstname, 
+.lastname,
+.email-signup,
+.password-signup,
+.password-retype {
+  position: relative;
+}
+
+%placeholder-static {
+  position: absolute;
+  top: 50%;
+  left: 3rem;
+  transform: translate(-50%, -50%);
+  transition: 100ms ease-in;
+  @extend .txt--green-L3;
+}
+
+%input-focus {
+  @extend .txt--white;
+  top: 50%;
+  left: 2rem;
+  transform: translate(-50%, -40px);
+}
+
+.firstname-label,
+.lastname-label,
+.email-signup-label, 
+.password-signup-label,
+.password-retype-label {
+  @extend %placeholder-static;
+}
+
+.email-signup-label {
+  @extend %placeholder-static;
+  left: 2.3rem;
+}
+
+.password-retype-label {
+  @extend %placeholder-static;
+  @extend .fsz1;
+  left: 3.8rem;
+}
+
+.firstname-focus,
+.lastname-focus,
+.password-signup-focus {
+  @extend %input-focus;
+}
+
+
+.email-signup-focus {
+  @extend %input-focus;
+  left: 1.2rem;
+}
+
+.password-retype-focus {
+  @extend %input-focus;
+  left: 2.8rem;
+}
+
+
+
