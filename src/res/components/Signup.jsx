@@ -3,56 +3,54 @@ import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignup from "@svg/ChatCloudSignup.jsx";
 import "./Signup.scss";
 import axios from "axios";
-
 const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signup = () => {
-  // const [hasInputFirstname, setHasInputFirstname] = useState(false);
-  // const [hasInputLastname, setHasInputLastname] = useState(false);
-  // const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
-  // const [hasInputPasswordSignup, setHasInputPasswordSignup] = useState(false);
-  // const [hasInputPasswordRetype, setHasInputPasswordRetype] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
+  const [hasInputFirstname, setHasInputFirstname] = useState(false);
+  const [hasInputLastname, setHasInputLastname] = useState(false);
+  const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
+  const [hasInputPasswordSignup, setHasInputPasswordSignup] = useState(false);
+  const [hasInputPasswordRetype, setHasInputPasswordRetype] = useState(false);
 
   // Input placeholder animation when focus
-  // const onChangeInput = (event) => {
-  //   const target = event.target;
-  //
-  //   if (target.name === "firstname") {
-  //     if (target.value) setHasInputFirstname(true);
-  //     else setHasInputFirstname(false);
-  //   } else if (target.name === "lastname") {
-  //     if (target.value) setHasInputLastname(true);
-  //     else setHasInputLastname(false);
-  //   } else if (target.name === "email-signup") {
-  //     if (target.value) setHasInputEmailSignup(true);
-  //     else setHasInputEmailSignup(false);
-  //   } else if (target.name === "password-signup") {
-  //     if (target.value) setHasInputPasswordSignup(true);
-  //     else setHasInputPasswordSignup(false);
-  //   } else if (target.name === "password-retype") {
-  //     if (target.value) setHasInputPasswordRetype(true);
-  //     else setHasInputPasswordRetype(false);
-  //   }
-  // };
+  const onChangeInput = (event) => {
+    const target = event.target;
 
+    if (target.name === "firstname") {
+      if (target.value) setHasInputFirstname(true);
+      else setHasInputFirstname(false);
+    } else if (target.name === "lastname") {
+      if (target.value) setHasInputLastname(true);
+      else setHasInputLastname(false);
+    } else if (target.name === "email_signup") {
+      if (target.value) setHasInputEmailSignup(true);
+      else setHasInputEmailSignup(false);
+    } else if (target.name === "password_signup") {
+      if (target.value) setHasInputPasswordSignup(true);
+      else setHasInputPasswordSignup(false);
+    } else if (target.name === "password_retype") {
+      if (target.value) setHasInputPasswordRetype(true);
+      else setHasInputPasswordRetype(false);
+    }
+  };
   const handleSignUp = (e) => {
     e.preventDefault();
+    console.log(e.target.email_signup.value);
+    // const email = "email-signup";
+    // const password = "password-signup";
+    // const passwordConf = "password-retype";
 
     axios
       .post(`${baseURL}auth?`, {
-        email: email,
-        password: password,
-        password_confirmation: confirmPass,
+        email: e.target.email_signup.value,
+        password: e.target.password_signup.value,
+        password_confirmation: e.target.password_retype.value,
       })
       .then((res) => {
         console.log(res);
       });
   };
+
   return (
     <main className="signup">
       <UsappLogo className="usapp-logo-signup" />
@@ -61,11 +59,11 @@ const Signup = () => {
         <div className="firstname">
           <label
             htmlFor="firstname"
-            // className={
-            //   hasInputFirstname
-            //     ? "firstname-label firstname-focus"
-            //     : "firstname-label"
-            // }
+            className={
+              hasInputFirstname
+                ? "firstname-label firstname-focus"
+                : "firstname-label"
+            }
           >
             firstname
           </label>
@@ -73,17 +71,17 @@ const Signup = () => {
             type="text"
             name="firstname"
             id="firstname"
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={onChangeInput}
           />
         </div>
         <div className="lastname">
           <label
             htmlFor="lastname"
-            // className={
-            //   hasInputLastname
-            //     ? "lastname-label lastname-focus"
-            //     : "lastname-label"
-            // }
+            className={
+              hasInputLastname
+                ? "lastname-label lastname-focus"
+                : "lastname-label"
+            }
           >
             lastname
           </label>
@@ -91,61 +89,61 @@ const Signup = () => {
             type="text"
             name="lastname"
             id="lastname"
-            onChange={(e) => setLastName(e.target.value)}
+            onChange={onChangeInput}
           />
         </div>
         <div className="email-signup">
           <label
             htmlFor="email-signup"
-            // className={
-            //   hasInputEmailSignup
-            //     ? "email-signup-label email-signup-focus"
-            //     : "email-signup-label"
-            // }
+            className={
+              hasInputEmailSignup
+                ? "email-signup-label email-signup-focus"
+                : "email-signup-label"
+            }
           >
             email
           </label>
           <input
             type="email"
-            name="email-signup"
+            name="email_signup"
             id="email-signup"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={onChangeInput}
           />
         </div>
         <div className="password-signup">
           <label
             htmlFor="password-signup"
-            // className={
-            //   hasInputPasswordSignup
-            //     ? "password-signup-label password-signup-focus"
-            //     : "password-signup-label"
-            // }
+            className={
+              hasInputPasswordSignup
+                ? "password-signup-label password-signup-focus"
+                : "password-signup-label"
+            }
           >
             password
           </label>
           <input
             type="password"
-            name="password-signup"
+            name="password_signup"
             id="password-signup"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={onChangeInput}
           />
         </div>
         <div className="password-retype">
           <label
             htmlFor="password-retype"
-            // className={
-            //   hasInputPasswordRetype
-            //     ? "password-retype-label password-retype-focus"
-            //     : "password-retype-label"
-            // }
+            className={
+              hasInputPasswordRetype
+                ? "password-retype-label password-retype-focus"
+                : "password-retype-label"
+            }
           >
             retype password
           </label>
           <input
             type="password"
-            name="password-retype"
+            name="password_retype"
             id="password-retype"
-            onChange={(e) => setConfirmPass(e.target.value)}
+            onChange={onChangeInput}
           />
         </div>
         <button type="submit" className="signup-btn">
