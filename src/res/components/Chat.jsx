@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({signInHeaders}) => {
+const Chat = ({ signInHeaders, token }) => {
 
   let [channel, setChannel] = useState({
     text: [],
@@ -13,11 +13,6 @@ const Chat = ({signInHeaders}) => {
 
   const [isExpanded, setIsExpended] = useState(false);
   const [expandedInfo, setExpandedInfo] = useState(false);
-  // const channel = {
-  //   text: ["general", "resources", "help", "group-1",  "help", "group-1",  "help", "group-1"],
-  //   voice: [],
-  //   direct: [],
-  // };
 
   const onClickChannelInfoExpand = (evt) => {
     setIsExpended(true);
@@ -34,7 +29,7 @@ const Chat = ({signInHeaders}) => {
   const onMouseChannelInfoExpand = () => setIsExpended(false);
 
   // temporary fetching of channels
-  const onClickGetChannels = () => {
+  const getChannels = () => {
     const {
       accessToken, 
       client,
@@ -53,18 +48,22 @@ const Chat = ({signInHeaders}) => {
     })
     .then(res => {
       const channelsFetch = [];
-      console.log(res.data.data);
       (res.data.data).forEach(data => {
         channelsFetch.push(data.name);
       })
       setChannel((prevChannel) => ({...prevChannel, text: channelsFetch}));
-      console.log(channelsFetch);
     })
   };
 
+  useEffect(() => {
+    if(token === undefined) {
+      return;
+    }
+    getChannels();
+  }, [token]);
+
   return (
     <main className="chat">
-      <button onClick={onClickGetChannels}>get channels</button>  
       <nav className="account" ariaLabel="account-info">
         <span className="profile">JL</span>
         <ul className="account-info">

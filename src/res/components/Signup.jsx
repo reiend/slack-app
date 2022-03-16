@@ -33,7 +33,6 @@ const Signup = () => {
       else setHasInputPasswordRetype(false);
     }
   };
-
   const handleSignUp = (e) => {
     e.preventDefault();
     axios
@@ -46,6 +45,7 @@ const Signup = () => {
         console.log(res);
       });
   };
+
 
   return (
     <main className="signup">

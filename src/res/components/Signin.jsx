@@ -9,6 +9,9 @@ const baseURL = "http://206.189.91.54/api/v1/";
 const Signin = (
   {
     setAccessToken,
+    setClient,
+    setExpiry,
+    setUID,
   }
 ) => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
@@ -39,6 +42,12 @@ const Signin = (
       .then((res) => {
         setAccessToken(res.headers["access-token"]);
         console.log(res.headers);
+
+        // use res to for data
+        setAccessToken("zx_weZm7ysoq-130aohvTA");
+        setClient("AWpKzV1fYKVAnOfCcf59Bw");
+        setExpiry("1648648223");
+        setUID("usapptest2@gmail.com");
       });
   };
 

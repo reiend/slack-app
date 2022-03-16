@@ -4,6 +4,7 @@ import Signup from "@components/Signup.jsx";
 import Chat from "@components/Chat.jsx";
 
 const App = () => {
+
   const [accessToken, setAccessToken] = useState();
   const [client, setClient] = useState();
   const [expiry, setExpiry] = useState();
@@ -35,7 +36,7 @@ const App = () => {
     <div>
       {/* <Signin {...setSignInHeaders}/> */}
       {/* <Signup/> */}
-      <Chat signInHeaders={signInHeaders}/>
+      <Chat signInHeaders={signInHeaders} token={accessToken}/>
     </div>
   );
 };
