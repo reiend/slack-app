@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Chat.scss";
 
-const Chat = () => {
-  const [isExpanded, setIsExpended] = useState(false);
-  const [expandedInfo, setExpandedInfo] = useState(false);
+const baseURL = "http://206.189.91.54/api/v1/";
+const Chat = ({signInHeaders}) => {
 
-  const channel = {
-    text: ["general", "resources", "help", "group-1",  "help", "group-1",  "help", "group-1"],
+  let [channel, setChannel] = useState({
+    text: [],
     voice: [],
     direct: [],
-  };
+  });
+
+  const [isExpanded, setIsExpended] = useState(false);
+  const [expandedInfo, setExpandedInfo] = useState(false);
+  // const channel = {
+  //   text: ["general", "resources", "help", "group-1",  "help", "group-1",  "help", "group-1"],
+  //   voice: [],
+  //   direct: [],
+  // };
 
   const onClickChannelInfoExpand = (evt) => {
     setIsExpended(true);
@@ -25,8 +33,38 @@ const Chat = () => {
 
   const onMouseChannelInfoExpand = () => setIsExpended(false);
 
+  // temporary fetching of channels
+  const onClickGetChannels = () => {
+    const {
+      accessToken, 
+      client,
+      expiry,
+      uid,
+    } = signInHeaders;
+    axios({
+      method: "get",
+      url: `${baseURL}/channels?`,
+      headers: {
+        ["access-token"]: accessToken,
+        ["client"]: client,
+        ["expiry"]: expiry,
+        ["uid"]: uid,
+      }
+    })
+    .then(res => {
+      const channelsFetch = [];
+      console.log(res.data.data);
+      (res.data.data).forEach(data => {
+        channelsFetch.push(data.name);
+      })
+      setChannel((prevChannel) => ({...prevChannel, text: channelsFetch}));
+      console.log(channelsFetch);
+    })
+  };
+
   return (
     <main className="chat">
+      <button onClick={onClickGetChannels}>get channels</button>  
       <nav className="account" ariaLabel="account-info">
         <span className="profile">JL</span>
         <ul className="account-info">

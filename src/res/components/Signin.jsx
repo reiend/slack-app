@@ -6,7 +6,11 @@ import axios from "axios";
 import "./Signin.scss";
 const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signin = () => {
+const Signin = (
+  {
+    setAccessToken,
+  }
+) => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
   const [hasInputPassword, setHasInputPassword] = useState(false);
 
@@ -23,6 +27,7 @@ const Signin = () => {
 
     }
   };
+
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -32,7 +37,8 @@ const Signin = () => {
         password: e.target.password.value,
       })
       .then((res) => {
-        console.log(res);
+        setAccessToken(res.headers["access-token"]);
+        console.log(res.headers);
       });
   };
 
