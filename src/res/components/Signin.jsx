@@ -16,9 +16,11 @@ const Signin = () => {
     if (target.name === "email") {
       if (event.target.value) setHasInputEmail(true);
       else setHasInputEmail(false);
+
     } else if (target.name === "password") {
       if (event.target.value) setHasInputPassword(true);
       else setHasInputPassword(false);
+
     }
   };
   const handleSignIn = (e) => {
@@ -42,6 +44,7 @@ const Signin = () => {
       </div>
       <div className="right-column">
         <h2 className="signin-heading">Sign in to Chat/Usap</h2>
+
         <form className="form-login" onSubmit={handleSignIn}>
           <div className="email-input">
             <input
@@ -77,7 +80,7 @@ const Signin = () => {
               password
             </label>
           </div>
-          <button className="signin-btn">Sign in</button>
+          <button className="signin-btn" type="submit">Sign in</button>
         </form>
       </div>
     </main>
