@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignup from "@svg/ChatCloudSignup.jsx";
 import "./Signup.scss";
+import axios from "axios";
+const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signup = () => {
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
@@ -20,23 +22,40 @@ const Signup = () => {
     } else if (target.name === "lastname") {
       if (target.value) setHasInputLastname(true);
       else setHasInputLastname(false);
-    } else if (target.name === "email-signup") {
+    } else if (target.name === "email_signup") {
       if (target.value) setHasInputEmailSignup(true);
       else setHasInputEmailSignup(false);
-    } else if (target.name === "password-signup") {
+    } else if (target.name === "password_signup") {
       if (target.value) setHasInputPasswordSignup(true);
       else setHasInputPasswordSignup(false);
-    } else if (target.name === "password-retype") {
+    } else if (target.name === "password_retype") {
       if (target.value) setHasInputPasswordRetype(true);
       else setHasInputPasswordRetype(false);
     }
+  };
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    console.log(e.target.email_signup.value);
+    // const email = "email-signup";
+    // const password = "password-signup";
+    // const passwordConf = "password-retype";
+
+    axios
+      .post(`${baseURL}auth?`, {
+        email: e.target.email_signup.value,
+        password: e.target.password_signup.value,
+        password_confirmation: e.target.password_retype.value,
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   return (
     <main className="signup">
       <UsappLogo className="usapp-logo-signup" />
       <h2 className="signup-heading">Sign up to Chat/Usap</h2>
-      <form className="form-signup">
+      <form className="form-signup" onSubmit={handleSignUp}>
         <div className="firstname">
           <label
             htmlFor="firstname"
@@ -86,7 +105,7 @@ const Signup = () => {
           </label>
           <input
             type="email"
-            name="email-signup"
+            name="email_signup"
             id="email-signup"
             onChange={onChangeInput}
           />
@@ -104,7 +123,7 @@ const Signup = () => {
           </label>
           <input
             type="password"
-            name="password-signup"
+            name="password_signup"
             id="password-signup"
             onChange={onChangeInput}
           />
@@ -122,7 +141,7 @@ const Signup = () => {
           </label>
           <input
             type="password"
-            name="password-retype"
+            name="password_retype"
             id="password-retype"
             onChange={onChangeInput}
           />

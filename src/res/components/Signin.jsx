@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignin from "@svg/ChatCloudSignin.jsx";
+import axios from "axios";
 
 import "./Signin.scss";
+const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signin = () => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
@@ -21,11 +23,19 @@ const Signin = () => {
 
     }
   };
+  const handleSignIn = (e) => {
+    e.preventDefault();
 
-  const onSubmitForm = (evt) => {
-    evt.preventDefault();
+    axios
+      .post(`${baseURL}/auth/sign_in?`, {
+        email: e.target.email.value,
+        password: e.target.password.value,
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
-  
+
   return (
     <main className="signin">
       <div className="left-column">
@@ -34,7 +44,8 @@ const Signin = () => {
       </div>
       <div className="right-column">
         <h2 className="signin-heading">Sign in to Chat/Usap</h2>
-        <form className="form-login" onSubmit={onSubmitForm}>
+
+        <form className="form-login" onSubmit={handleSignIn}>
           <div className="email-input">
             <input
               type="email"
@@ -77,4 +88,3 @@ const Signin = () => {
 };
 
 export default Signin;
-

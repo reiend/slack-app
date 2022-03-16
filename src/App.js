@@ -6,7 +6,7 @@ import Chat from "@components/Chat.jsx";
 const App = () => {
   return (
     <div>
-      {/* <Signin/> */}
+      <Signin />
       {/* <Signup/> */}
       <Chat/>
     </div>
@@ -14,4 +14,3 @@ const App = () => {
 };
 
 export default App;
-
