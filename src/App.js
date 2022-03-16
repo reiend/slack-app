@@ -6,9 +6,9 @@ import Chat from "@components/Chat.jsx";
 const App = () => {
   return (
     <div>
-      <Signin />
-      {/* <Signup/> */}
-      <Chat/>
+      {/* <Signin /> */}
+      <Signup/>
+      {/* <Chat/> */}
     </div>
   );
 };
