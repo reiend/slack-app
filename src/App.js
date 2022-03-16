@@ -5,11 +5,10 @@ import Signup from "@components/Signup.jsx";
 const App = () => {
   return (
     <div>
-      {/* <Signin/> */}
+      <Signin />
       {/* <Signup/> */}
     </div>
   );
 };
 
 export default App;
-
