@@ -6,7 +6,7 @@ const Chat = () => {
   const [expandedInfo, setExpandedInfo] = useState(false);
 
   const channel = {
-    text: ["general", "resources", "help", "group-1"],
+    text: ["general", "resources", "help", "group-1",  "help", "group-1",  "help", "group-1"],
     voice: [],
     direct: [],
   };
@@ -19,7 +19,7 @@ const Chat = () => {
       .toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map(name => <li className="channel-name">{name}</li>)
+      channelNames.map(name => <li className="channel-name">#{name}</li>)
     );
   };
 
@@ -65,7 +65,7 @@ const Chat = () => {
             </h2>
           ))}
         </nav>
-        { isExpanded && <ul> {expandedInfo} </ul> }
+        { isExpanded && <ul className="channel-name-container"> {expandedInfo} </ul> }
       </div>
     </main>
   );

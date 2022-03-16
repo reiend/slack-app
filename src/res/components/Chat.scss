@@ -151,7 +151,7 @@
   background-color: #3bcf93;
   position: absolute;
   height: 40vh;
-  bottom: -12vh;
+  bottom: -11vh;
 }
 
 /* channel info */
@@ -206,9 +206,36 @@
   }
 }
 
+.channel-name-container {
+  @extend .mt2;
+  @extend %scroll-bar;
+  @extend %scroll-bar;
+  height: 70%;
+  overflow-y: auto;
+  flex: none;
+  width: 100%;
+  flex-flow: row nowrap;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+
+  &::-webkit-scrollbar-thumb {
+    @extend .bg--green-L10;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    @extend .bg--green-L8;
+  }
+}
+
 .channel-name {
   list-style: none;
+  @extend .txt--black;
   @extend .my1;
+  font-size: 1.4rem;
+  @extend .fw3;
+  width: 100%;
+  &:hover {
+    @extend .bg--green-L10;
+  }
 }
 
 /* end of channel info */
