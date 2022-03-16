@@ -25,6 +25,7 @@ const App = () => {
   };
 
   // tempory data for sign in headers
+  // remove this after setting headers on forms
   useEffect(() => {
     setAccessToken("zx_weZm7ysoq-130aohvTA");
     setClient("AWpKzV1fYKVAnOfCcf59Bw");

@@ -43,11 +43,11 @@ const Signin = (
         setAccessToken(res.headers["access-token"]);
         console.log(res.headers);
 
-        // use res to for data
-        setAccessToken("zx_weZm7ysoq-130aohvTA");
-        setClient("AWpKzV1fYKVAnOfCcf59Bw");
-        setExpiry("1648648223");
-        setUID("usapptest2@gmail.com");
+        // use res headers here on the corresponding setters
+        // setAccessToken("zx_weZm7ysoq-130aohvTA");
+        // setClient("AWpKzV1fYKVAnOfCcf59Bw");
+        // setExpiry("1648648223");
+        // setUID("usapptest2@gmail.com");
       });
   };
 
