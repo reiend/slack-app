@@ -25,6 +25,7 @@ module.exports = {
   resolve: {
     // for shorten imports
     alias: {
+
       // components root 
       "@components": `${ROOT_PATH.src}/res/components`,
 
@@ -42,7 +43,7 @@ module.exports = {
       
       // resolve naming conflicts using its file extention
       extensions: ['.jsx', '.js', '.json', "..."], /* ... use default extention */
-    }
+    },
   },
 
   module: {

@@ -7,7 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Signin.scss";
 const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signin = () => {
+const Signin = (
+  {
+    setAccessToken,
+    setClient,
+    setExpiry,
+    setUID,
+  }
+) => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
   const [hasInputPassword, setHasInputPassword] = useState(false);
   const navigate = useNavigate();
@@ -18,11 +25,14 @@ const Signin = () => {
     if (target.name === "email") {
       if (event.target.value) setHasInputEmail(true);
       else setHasInputEmail(false);
+
     } else if (target.name === "password") {
       if (event.target.value) setHasInputPassword(true);
       else setHasInputPassword(false);
+
     }
   };
+
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -32,7 +42,14 @@ const Signin = () => {
         password: e.target.password.value,
       })
       .then((res) => {
-        console.log(res);
+        setAccessToken(res.headers["access-token"]);
+        console.log(res.headers);
+
+        // use res headers here on the corresponding setters
+        // setAccessToken("zx_weZm7ysoq-130aohvTA");
+        // setClient("AWpKzV1fYKVAnOfCcf59Bw");
+        // setExpiry("1648648223");
+        // setUID("usapptest2@gmail.com");
       });
   };
 
@@ -44,6 +61,7 @@ const Signin = () => {
       </div>
       <div className="right-column">
         <h2 className="signin-heading">Sign in to Chat/Usap</h2>
+
         <form className="form-login" onSubmit={handleSignIn}>
           <div className="email-input">
             <input
