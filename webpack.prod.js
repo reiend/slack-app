@@ -1,22 +1,23 @@
-const path = require("path");                                     /* node path */
-const glob = require("glob");                                 
-const HtmlWebpackPlugin = require("html-webpack-plugin");         /* for loading / create html */
-const MinicssExtractPlugin = require("mini-css-extract-plugin")   /* extracting css from js*/
-const PurgecssPlugin = require('purgecss-webpack-plugin')         /* for cleaning unused style */
+const path = require("path"); /* node path */
+const glob = require("glob");
+const HtmlWebpackPlugin = require("html-webpack-plugin"); /* for loading / create html */
+const MinicssExtractPlugin = require("mini-css-extract-plugin"); /* extracting css from js*/
+const PurgecssPlugin = require("purgecss-webpack-plugin"); /* for cleaning unused style */
+const Dotenv = require("dotenv-webpack");
 
 const ROOT_PATH = {
-  src: path.resolve(__dirname, `src`)
+  src: path.resolve(__dirname, `src`),
 };
 
 const ASSET_PATH = {
-  assets: path.resolve(__dirname, `assets`)
+  assets: path.resolve(__dirname, `assets`),
 };
 
 module.exports = {
   mode: "production",
   entry: "./src/index.js",
 
-  output:   {
+  output: {
     filename: "[name][contenthash].bundle.js",
     path: path.resolve(__dirname, "./dist/prod"),
     clean: true,
@@ -25,14 +26,13 @@ module.exports = {
   resolve: {
     // for shorten imports
     alias: {
-
-      // components root 
+      // components root
       "@components": `${ROOT_PATH.src}/res/components`,
 
-      // globals root 
+      // globals root
       "@globals": `${ROOT_PATH.src}/res/globals`,
-      
-      // svgs root 
+
+      // svgs root
       "@svg": `${ROOT_PATH.src}/res/globals/svg`,
 
       // styling root
@@ -40,9 +40,14 @@ module.exports = {
 
       // assets root
       "@assets": `${ASSET_PATH.assets}`,
-      
+
       // resolve naming conflicts using its file extention
-      extensions: ['.jsx', '.js', '.json', "..."], /* ... use default extention */
+      extensions: [
+        ".jsx",
+        ".js",
+        ".json",
+        "...",
+      ] /* ... use default extention */,
     },
   },
 
@@ -51,14 +56,9 @@ module.exports = {
       // load css
       {
         // sass or scss
-        test: /\.s[ac]ss$/i, 
-        use: 
-          [
-            MinicssExtractPlugin.loader, 
-            "css-loader",
-            "sass-loader",
-          ]
-      }, 
+        test: /\.s[ac]ss$/i,
+        use: [MinicssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
       {
         // transpiler
         test: /\.m?(js|jsx)$/,
@@ -67,7 +67,7 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
-            "targets": { "esmodules": true }
+            targets: { esmodules: true },
           },
         },
       },
@@ -80,9 +80,9 @@ module.exports = {
       // pulling fonts
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
-    ]
+    ],
   },
 
   plugins: [
@@ -97,8 +97,9 @@ module.exports = {
     }),
     // unused style clean up
     new PurgecssPlugin({
-      paths: glob.sync(`${ROOT_PATH.src}/**/*`, {nodir: true}),
-    })
+      paths: glob.sync(`${ROOT_PATH.src}/**/*`, { nodir: true }),
+    }),
+    new Dotenv(),
   ],
 
   devServer: {
@@ -109,6 +110,5 @@ module.exports = {
     hot: true,
     compress: true,
     port: 9000,
-  }
-}
-
+  },
+};
