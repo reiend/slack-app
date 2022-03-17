@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
@@ -10,6 +11,7 @@ const Chat = ({
   uid,
 }) => {
 
+  const navigate = useNavigate();
   let [channel, setChannel] = useState({
     text: [],
     voice: [],
@@ -29,6 +31,12 @@ const Chat = ({
     setExpandedInfo(
       channelNames.map(name => <li className="channel-name">#{name}</li>)
     );
+  };
+
+  const onClickSignout = () => {
+    console.log("logging out");
+    localStorage.removeItem("access-token");
+    navigate("/");
   };
 
   const onMouseChannelInfoExpand = () => setIsExpended(false);
@@ -64,7 +72,7 @@ const Chat = ({
         <ul className="account-info">
           <li>Friends</li>
           <li>Settings</li>
-          <li id="logout">Logout</li>
+          <li id="logout" onClick={onClickSignout}>Signout</li>
         </ul>
       </nav>
       <div className="chat-room-container">
