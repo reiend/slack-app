@@ -35,6 +35,7 @@ const App = () => {
 
   return (
     <div>
+      <h2>Auth route Initial</h2>
       <Outlet/>
     </div>
   );
