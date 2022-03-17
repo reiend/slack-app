@@ -1,12 +1,12 @@
 {
-  "homepage": "http://reiend.github.io/slack-app",
+  "homepage": "https://reiend.github.io/slack-app",
   "name": "slack-app",
   "version": "1.0.0",
   "description": "",
   "private": "true",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist/prod",
     "build": "webpack --config webpack.prod.js",
     "start": "webpack server --config webpack.dev.js"
   },

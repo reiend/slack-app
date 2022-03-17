@@ -89,6 +89,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Slack app",
       filename: "index.html",
+      inject: "body",
     }),
     // css extractor from js
     new MinicssExtractPlugin({
