@@ -155,3 +155,7 @@
 .input-focus-password {
   left: 2rem;
 }
+
+.no-account {
+  @extend .txt--white;
+}

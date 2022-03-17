@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
-import Signin from "@components/Signin.jsx";
-import Signup from "@components/Signup.jsx";
-import Chat from "@components/Chat.jsx";
+
+import React from "react";
+import { Outlet } from "react-router-dom";
+
 
 const App = () => {
 
@@ -35,9 +35,7 @@ const App = () => {
 
   return (
     <div>
-      {/* <Signin {...setSignInHeaders}/> */}
-      {/* <Signup/> */}
-      <Chat signInHeaders={signInHeaders} token={accessToken}/>
+      <Outlet/>
     </div>
   );
 };
