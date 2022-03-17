@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Signin.scss";
 const baseURL = "http://206.189.91.54/api/v1/";
-
 const Signin = (
   {
     setAccessToken,
@@ -42,14 +41,12 @@ const Signin = (
         password: e.target.password.value,
       })
       .then((res) => {
-        setAccessToken(res.headers["access-token"]);
-        console.log(res.headers);
-
         // use res headers here on the corresponding setters
-        // setAccessToken("zx_weZm7ysoq-130aohvTA");
-        // setClient("AWpKzV1fYKVAnOfCcf59Bw");
-        // setExpiry("1648648223");
-        // setUID("usapptest2@gmail.com");
+        setAccessToken(res.headers["access-token"]);
+        setClient(res.headers["client"]);
+        setExpiry(res.headers["expiry"]);
+        setUID(res.headers["uid"]);
+        navigate("/chat");
       });
   };
 
