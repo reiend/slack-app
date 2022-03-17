@@ -35,11 +35,6 @@ const Signup = () => {
   };
   const handleSignUp = (e) => {
     e.preventDefault();
-    console.log(e.target.email_signup.value);
-    // const email = "email-signup";
-    // const password = "password-signup";
-    // const passwordConf = "password-retype";
-
     axios
       .post(`${baseURL}auth?`, {
         email: e.target.email_signup.value,
@@ -50,6 +45,7 @@ const Signup = () => {
         console.log(res);
       });
   };
+
 
   return (
     <main className="signup">
