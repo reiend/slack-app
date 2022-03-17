@@ -183,5 +183,16 @@
   left: 2.8rem;
 }
 
+.has-account {
+  display: block;
+  @extend .xxs_-col10;
+  @extend .mt1;;
+  @extend .txt--white;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    color: #eee;
+  }
+}
 
 

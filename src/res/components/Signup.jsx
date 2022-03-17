@@ -3,6 +3,7 @@ import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignup from "@svg/ChatCloudSignup.jsx";
 import "./Signup.scss";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signup = () => {
@@ -149,6 +150,7 @@ const Signup = () => {
         <button type="submit" className="signup-btn">
           Sign up
         </button>
+        <Link to="/" className="has-account">I have an account</Link>
         <ChatCloudSignup className="chat-cloud-signup" />
       </form>
     </main>
