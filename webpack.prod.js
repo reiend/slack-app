@@ -6,7 +6,7 @@ const PurgecssPlugin = require('purgecss-webpack-plugin')         /* for cleanin
 
 const ROOT_PATH = {
   src: path.resolve(__dirname, `src`)
-}
+};
 
 const ASSET_PATH = {
   assets: path.resolve(__dirname, `assets`)
@@ -25,6 +25,7 @@ module.exports = {
   resolve: {
     // for shorten imports
     alias: {
+
       // components root 
       "@components": `${ROOT_PATH.src}/res/components`,
 
@@ -39,10 +40,10 @@ module.exports = {
 
       // assets root
       "@assets": `${ASSET_PATH.assets}`,
-
+      
       // resolve naming conflicts using its file extention
       extensions: ['.jsx', '.js', '.json', "..."], /* ... use default extention */
-    }
+    },
   },
 
   module: {
@@ -89,7 +90,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Slack app",
       filename: "index.html",
-      inject: "body",
     }),
     // css extractor from js
     new MinicssExtractPlugin({
