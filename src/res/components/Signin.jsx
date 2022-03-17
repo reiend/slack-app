@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Signin.scss";
+
 const baseURL = "http://206.189.91.54/api/v1/";
 const Signin = (
   {
@@ -14,6 +15,7 @@ const Signin = (
     setUID,
   }
 ) => {
+
   const [hasInputEmail, setHasInputEmail] = useState(false);
   const [hasInputPassword, setHasInputPassword] = useState(false);
   const navigate = useNavigate();
@@ -24,11 +26,9 @@ const Signin = (
     if (target.name === "email") {
       if (event.target.value) setHasInputEmail(true);
       else setHasInputEmail(false);
-
     } else if (target.name === "password") {
       if (event.target.value) setHasInputPassword(true);
       else setHasInputPassword(false);
-
     }
   };
 
@@ -36,7 +36,7 @@ const Signin = (
     e.preventDefault();
 
     axios
-      .post(`${baseURL}/auth/sign_in?`, {
+      .post(`${process.env.BASEURL}/auth/sign_in?`, {
         email: e.target.email.value,
         password: e.target.password.value,
       })
@@ -97,7 +97,9 @@ const Signin = (
           <button className="signin-btn">Sign in</button>
           <span className="no-account">
             no account?
-            <Link to="/signup" className="create-account">create an account</Link>
+            <Link to="/signup" className="create-account">
+              create an account
+            </Link>
           </span>
         </form>
       </div>
