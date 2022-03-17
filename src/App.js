@@ -1,7 +1,5 @@
-
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Outlet } from "react-router-dom";
-
 
 const App = () => {
 
@@ -35,7 +33,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Auth route Initial</h2>
+      {/* <h2>Auth route Initial</h2> */}
       <Outlet/>
     </div>
   );
