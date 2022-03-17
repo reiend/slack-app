@@ -46,6 +46,7 @@ const Signin = (
         setClient(res.headers["client"]);
         setExpiry(res.headers["expiry"]);
         setUID(res.headers["uid"]);
+        localStorage.setItem("access-token", res.headers["access-token"]);
         navigate("/chat");
       });
   };
