@@ -32,7 +32,10 @@ module.exports = {
       // globals root
       "@globals": `${ROOT_PATH.src}/res/globals`,
 
-      // svgs root
+      // context root 
+      "@context": `${ROOT_PATH.src}/res/context`,
+      
+      // svgs root =======
       "@svg": `${ROOT_PATH.src}/res/globals/svg`,
 
       // styling root

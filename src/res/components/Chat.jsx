@@ -3,7 +3,12 @@ import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({ signInHeaders, token }) => {
+const Chat = ({ 
+  accessToken,
+  client,
+  expiry,
+  uid,
+}) => {
 
   let [channel, setChannel] = useState({
     text: [],
@@ -30,12 +35,6 @@ const Chat = ({ signInHeaders, token }) => {
 
   // temporary fetching of channels
   const getChannels = () => {
-    const {
-      accessToken, 
-      client,
-      expiry,
-      uid,
-    } = signInHeaders;
     axios({
       method: "get",
       url: `${baseURL}/channels?`,
@@ -56,12 +55,8 @@ const Chat = ({ signInHeaders, token }) => {
   };
 
   useEffect(() => {
-    if(token === undefined) {
-      return;
-    }
     getChannels();
-  }, [token]);
-
+  }, []);
   return (
     <main className="chat">
       <nav className="account" ariaLabel="account-info">
