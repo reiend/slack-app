@@ -1,16 +1,10 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import Signin from "@components/Signin.jsx";
-import Signup from "@components/Signup.jsx";
-
+import { Outlet } from "react-router-dom";
 const App = () => {
   return (
-    <BrowserRouter>
-      <div>
-        <Signin />
-        {/* <Signup/> */}
-      </div>
-    </BrowserRouter>
+    <div>
+      <Outlet/>
+    </div>
   );
 };
 

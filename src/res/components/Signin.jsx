@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignin from "@svg/ChatCloudSignin.jsx";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Signin.scss";
 const baseURL = "http://206.189.91.54/api/v1/";
@@ -9,6 +10,7 @@ const baseURL = "http://206.189.91.54/api/v1/";
 const Signin = () => {
   const [hasInputEmail, setHasInputEmail] = useState(false);
   const [hasInputPassword, setHasInputPassword] = useState(false);
+  const navigate = useNavigate();
 
   // Input placeholder animation when focus
   const onChangeInput = (event) => {
@@ -78,7 +80,11 @@ const Signin = () => {
             </label>
           </div>
           <button className="signin-btn">Sign in</button>
+          <span className="no-account">
+            no account?
+          </span>
         </form>
+        <Link to="/signup">create an account</Link>
       </div>
     </main>
   );
