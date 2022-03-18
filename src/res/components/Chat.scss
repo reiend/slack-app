@@ -238,5 +238,13 @@
   }
 }
 
+.add-channel {
+  position: absolute;
+  left: 90%;
+  bottom: 0%;
+  @extend .fsz4;
+  @extend .txt--white;
+}
+
 /* end of channel info */
 

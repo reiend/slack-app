@@ -34,8 +34,10 @@ const Chat = ({
   };
 
   const onClickSignout = () => {
-    console.log("logging out");
     localStorage.removeItem("access-token");
+    localStorage.removeItem("client");
+    localStorage.removeItem("expiry");
+    localStorage.removeItem("uid");
     navigate("/");
   };
 
@@ -65,6 +67,8 @@ const Chat = ({
   useEffect(() => {
     getChannels();
   }, []);
+
+
   return (
     <main className="chat">
       <nav className="account" ariaLabel="account-info">
@@ -106,6 +110,7 @@ const Chat = ({
           ))}
         </nav>
         { isExpanded && <ul className="channel-name-container"> {expandedInfo} </ul> }
+        { isExpanded && <span className="add-channel">+</span> }
       </div>
     </main>
   );
