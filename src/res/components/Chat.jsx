@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({ accessToken, client, expiry, uid }) => {
+const Chat = ({ accessToken, client, expiry, uid, isAddingChannel, setIsAddingChannel  }) => {
   const navigate = useNavigate();
   const [channel, setChannel] = useState({
     text: [],
@@ -42,16 +42,24 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
   // for adding channel or friends
   const onSubmitAdd = (evt) => {
     evt.preventDefault();
+    const channel = evt.target["add-channel"].value;
+    const user = evt.target["add-user"].value;
     axios({
-      method: "get",
-      url: `${baseURL}/channels?name=${evt.target["add-new"]}`,
+      method: "post",
+      url: `${baseURL}/channels?name=${channel}&user_ids=[${user}]`,
+      mode: "no-cors",
       headers: {
-        ["access-token"]: accessToken,
-        ["client"]: client,
-        ["expiry"]: expiry,
-        ["uid"]: uid,
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
       },
-    })
+    });
+    setIsAddingChannel((prevIsAddingChannel) => prevIsAddingChannel + 1);
+    console.log(isAddingChannel);
+    console.log(evt.target["add-channel"].value);
+    console.log(evt.target["add-user"].value);
+    console.log(`${baseURL}/channels?name=${channel}&user_ids=[${user}]`);
   };
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
@@ -78,7 +86,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
 
   useEffect(() => {
     getChannels();
-  }, []);
+  }, [isAddingChannel]);
 
   return (
     <main className="chat">
@@ -141,28 +149,44 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
           </span>
         )}
       </div>
-        
-        {/* form for adding channels and friends*/}
-        {
-        isAdding && 
-        <form className="add" onSubmit={onSubmitAdd}>
 
+      {/* form for adding channels and friends*/}
+      {isAdding && (
+        <form className="add" onSubmit={onSubmitAdd}>
           <div className="input-add-channel-container">
-            <label htmlFor="add-channel" className="add-channel-label">Channel</label>
-            <input type="text" className="input-channel" name="add-channel" id="add-channel"/>
+            <label htmlFor="add-channel" className="add-channel-label">
+              Channel
+            </label>
+            <input
+              type="text"
+              className="input-channel"
+              name="add-channel"
+              id="add-channel"
+            />
           </div>
 
           <div className="input-add-user-container">
-            <label htmlFor="add-user" className="add-user-label">User ID: </label>
-            <input type="text" className="input-user" name="add-user" id="add-user"/>
+            <label htmlFor="add-user" className="add-user-label">
+              User ID:{" "}
+            </label>
+            <input
+              type="text"
+              className="input-user"
+              name="add-user"
+              id="add-user"
+            />
           </div>
 
-          <button className="submit-add" type="submit">save</button>
-          <button className="cancel-add" onClick={onClickCancelAdd}>cancel</button>
+          <button className="submit-add" type="submit">
+            save
+          </button>
+          <button className="cancel-add" onClick={onClickCancelAdd}>
+            cancel
+          </button>
         </form>
-        }
-        {/* backdrop for adding channel and friends*/}
-        { isAdding && <div className="adding-backdrop"></div>}
+      )}
+      {/* backdrop for adding channel and friends*/}
+      {isAdding && <div className="adding-backdrop"></div>}
     </main>
   );
 };

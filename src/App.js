@@ -10,6 +10,7 @@ const App = () => {
   const [client, setClient] = useState();
   const [expiry, setExpiry] = useState();
   const [uid, setUID] = useState();
+  const [isAddingChannel, setIsAddingChannel] = useState();
 
   const setSignInHeaders = {
     setAccessToken,
@@ -25,6 +26,11 @@ const App = () => {
     uid,
   };
 
+  const observeChannelAdd = {
+    isAddingChannel,
+    setIsAddingChannel,
+  }
+
   return (
     
     <div>
@@ -33,7 +39,7 @@ const App = () => {
           <Route path="signup" element={ <Signup /> }/>
           <Route path="chat" element={ 
               <RequiredAuth>
-                <Chat {...signInHeaders}/> 
+                <Chat {...signInHeaders} {...observeChannelAdd}/> 
               </RequiredAuth>
            } />
         </Routes>
