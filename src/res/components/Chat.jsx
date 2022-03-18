@@ -52,7 +52,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
         ["uid"]: uid,
       },
     }).then((res) => {
-      if(!res.data.data) return;
+      if (!res.data.data) return;
       const channelsFetch = [];
       res.data.data.forEach((data) => {
         channelsFetch.push(data.name);
@@ -70,13 +70,15 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
     // console.log(localStorage.getItem("client")),
     // console.log(localStorage.getItem("expiry")),
     // console.log(localStorage.getItem("uid")),
-      
+
     axios({
       method: "POST",
+      mode: "no-cors",
       url: `${baseURL}/channels?name=${channelName}&user_ids=[${user}]`,
       headers: {
-        "Access-Control-Allow-origin": "*",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+        // "Access-Control-Allow-origin": "*",
+        // "Access-Control-Allow-Headers":
+        //   "Origin, X-Requested-With, Content-Type, Accept",
         ["access-token"]: localStorage.getItem("access-token"),
         ["client"]: localStorage.getItem("client"),
         ["expiry"]: localStorage.getItem("expiry"),

@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Signin from "@components/Signin.jsx";
 import Signup from "@components/Signup.jsx";
 import Chat from "@components/Chat.jsx";
+import DirectMessage from "./res/components/directMessage.jsx";
 import RequiredAuth from "@components/RequiredAuth.jsx";
 import { Routes, Route, Outlet } from "react-router-dom";
 
@@ -26,18 +27,21 @@ const App = () => {
   };
 
   return (
-    
     <div>
-        <Routes>
-          <Route path="/" element={ <Signin { ...setSignInHeaders }/> }/>
-          <Route path="signup" element={ <Signup /> }/>
-          <Route path="chat" element={ 
-              <RequiredAuth>
-                <Chat {...signInHeaders} /> 
-              </RequiredAuth>
-           } />
-        </Routes>
-       <Outlet/>
+      <Routes>
+        <Route path="/" element={<Signin {...setSignInHeaders} />} />
+        <Route path="signup" element={<Signup />} />
+        <Route
+          path="chat"
+          element={
+            <RequiredAuth>
+              <Chat {...signInHeaders} />
+              <DirectMessage {...signInHeaders} />
+            </RequiredAuth>
+          }
+        />
+      </Routes>
+      <Outlet />
     </div>
   );
 };
