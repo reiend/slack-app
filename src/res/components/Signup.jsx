@@ -5,6 +5,7 @@ import "./Signup.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 // const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signup = () => {
@@ -46,12 +47,29 @@ const Signup = () => {
     e.preventDefault();
     axios
       .post(`${process.env.BASEURL}auth?`, {
-        email: data.email.value,
-        password: data.password.value,
-        password_confirmation: data.password_confirmation.value,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
       })
       .then((res) => {
         console.log(res);
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data.errors.full_messages[0]);
+          console.log(error.response.status);
+          const errorMSG = error.response.data.errors.full_messages[0];
+          toast(`${errorMSG}!`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(error.response.headers);
+        }
       });
   };
 
