@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import DirectMessage from "@components/DirectMessage.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({ accessToken, client, expiry, uid }) => {
+const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
   const navigate = useNavigate();
 
   const [channel, setChannel] = useState({
@@ -12,6 +13,8 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
     voice: [],
     direct: [],
   });
+
+  const [channelTypeRender, setChannelTypeRender] = useState("text");
 
   const [expandedInfo, setExpandedInfo] = useState(false);
   const [isExpanded, setIsExpended] = useState(false);
@@ -28,6 +31,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
     setExpandedInfo(
       channelNames.map((name) => <li className="channel-name" key={name}>#{name}</li>)
     );
+    setChannelTypeRender(evt.target.id);
   };
 
   const onClickSignout = () => {
@@ -93,9 +97,14 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
+  // filter user list
+  const onChangeFilterUser = (evt) => {
+    console.log(evt);
+  };
+
   useEffect(() => {
     getChannels();
-  }, [channel.text.length]);
+  }, [channel.text.length, channelTypeRender]);
 
   return (
     <main className="chat">
@@ -113,7 +122,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
         {/* render channels here */}
         {/* filler */}
         <div className="chat-room-filler"></div>
-        {channel.text.map((channelName) => (
+        {channel[channelTypeRender].map((channelName) => (
           <div className="chat-room" key={channelName}>
             <h2>{channelName}</h2>
             <div className="chat-box">messages</div>
@@ -136,7 +145,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
           aria-label="channel-Info"
         >
           {Object.keys(channel).map((type) => (
-            <h2 className="channel-type" onClick={onClickChannelInfoExpand} key={type}>
+            <h2 className="channel-type" onClick={onClickChannelInfoExpand} key={type} id={type}>
               {type} channel
             </h2>
           ))}
@@ -160,7 +169,8 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
       </div>
 
       {/* form for adding channels and friends*/}
-      {isAdding && (
+
+      {isAdding && channelTypeRender === "text"  && (
         <form className="add" onSubmit={onSubmitAdd} >
           <div className="input-add-channel-container">
             <label htmlFor="add-channel" className="add-channel-label">
@@ -194,6 +204,10 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
           </button>
         </form>
       )}
+
+      {isAdding && channelTypeRender === "direct"  && 
+        <DirectMessage usersList={usersList} onClickCancelAdd={onClickCancelAdd} />
+      }
       {/* backdrop for adding channel and friends*/}
       {isAdding && <div className="adding-backdrop"></div>}
     </main>
