@@ -26,7 +26,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map((name) => <li className="channel-name">#{name}</li>)
+      channelNames.map((name) => <li className="channel-name" key={name}>#{name}</li>)
     );
   };
 
@@ -52,7 +52,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
         ["uid"]: uid,
       },
     }).then((res) => {
-      if(!res.data.data) return;
+      if (!res.data.data) return;
       const channelsFetch = [];
       res.data.data.forEach((data) => {
         channelsFetch.push(data.name);
@@ -62,41 +62,44 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
   };
 
   // for adding channel or friends
-  const onSubmitAdd = async (evt) => {
+  const onSubmitAdd = (evt) => {
     evt.preventDefault();
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
-    // console.log(localStorage.getItem("access-token")),
-    // console.log(localStorage.getItem("client")),
-    // console.log(localStorage.getItem("expiry")),
-    // console.log(localStorage.getItem("uid")),
-      
     axios({
       method: "POST",
-      url: `${baseURL}/channels?name=${channelName}&user_ids=[${user}]`,
+      url: `${process.env.BASEURL}channels?name=${channelName}&user_ids=[${user}]`,
       headers: {
-        "Access-Control-Allow-origin": "*",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
         ["access-token"]: localStorage.getItem("access-token"),
         ["client"]: localStorage.getItem("client"),
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    });
-    console.log(channelName);
-    console.log(user);
-    console.log(`${baseURL}/channels?name=${channelName}&user_ids=[${user}]`);
+    }).catch(() => {
+      axios({
+        method: "POST",
+        url: `${process.env.BASEURL}channels?name=${channelName}&user_ids=[${user}]`,
+        headers: {
+          ["access-token"]: localStorage.getItem("access-token"),
+          ["client"]: localStorage.getItem("client"),
+          ["expiry"]: localStorage.getItem("expiry"),
+          ["uid"]: localStorage.getItem("uid"),
+        },
+      })
+      getChannels();
+    })
   };
+
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
   useEffect(() => {
     getChannels();
-  }, []);
+  }, [channel.text.length]);
 
   return (
     <main className="chat">
-      <nav className="account" ariaLabel="account-info">
+      <nav className="account" aria-label="account-info">
         <span className="profile">JL</span>
         <ul className="account-info">
           <li>Friends</li>
@@ -111,7 +114,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
         {/* filler */}
         <div className="chat-room-filler"></div>
         {channel.text.map((channelName) => (
-          <div className="chat-room">
+          <div className="chat-room" key={channelName}>
             <h2>{channelName}</h2>
             <div className="chat-box">messages</div>
           </div>
@@ -130,10 +133,10 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
           className={
             !isExpanded ? "channel-info" : "channel-info channel-info-expanded"
           }
-          ariaLabel="channel-Info"
+          aria-label="channel-Info"
         >
           {Object.keys(channel).map((type) => (
-            <h2 className="channel-type" onClick={onClickChannelInfoExpand}>
+            <h2 className="channel-type" onClick={onClickChannelInfoExpand} key={type}>
               {type} channel
             </h2>
           ))}
@@ -158,7 +161,7 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
 
       {/* form for adding channels and friends*/}
       {isAdding && (
-        <form className="add" onSubmit={onSubmitAdd}>
+        <form className="add" onSubmit={onSubmitAdd} >
           <div className="input-add-channel-container">
             <label htmlFor="add-channel" className="add-channel-label">
               Channel
