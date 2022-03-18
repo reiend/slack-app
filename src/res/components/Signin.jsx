@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignin from "@svg/ChatCloudSignin.jsx";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 import "./Signin.scss";
 
@@ -47,9 +47,23 @@ const Signin = (
         setExpiry(res.headers["expiry"]);
         setUID(res.headers["uid"]);
         localStorage.setItem("access-token", res.headers["access-token"]);
+        localStorage.setItem("client", res.headers["client"]);
+        localStorage.setItem("expiry", res.headers["expiry"]);
+        localStorage.setItem("uid", res.headers["uid"]);
         navigate("/chat");
       });
   };
+
+  // if found token redirect to chat room with corresponding headers
+  useEffect(() => {
+    if(localStorage.getItem("access-token")) {
+      setAccessToken(localStorage.getItem("access-token"));
+      setClient(localStorage.getItem("client"));
+      setExpiry(localStorage.getItem("expiry"));
+      setUID(localStorage.getItem("uid"));
+      navigate("/chat");
+    }
+  }, []);
 
   return (
     <main className="signin">

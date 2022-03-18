@@ -238,5 +238,89 @@
   }
 }
 
+%channel-expanded-buttons {
+  position: absolute;
+  left: 90%;
+  cursor: pointer;
+}
+.add-channel {
+  @extend %channel-expanded-buttons;
+  @extend .txt--white;
+  @extend .fsz4;
+  bottom: 0%;
+}
+
+.close-channel-expand {
+  @extend %channel-expanded-buttons;
+  @extend .fsz2;
+  @extend .txt--white;
+  top: 5%;
+}
+.add {
+  @extend .bg--green-L3;
+  @extend .p2;
+  @extend .row;
+  @extend .br2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+}
+
+.add-new {
+  @extend .txt--white;
+}
+
+.input-add-container {
+  @extend .xxs_-col10;
+}
+
+.input-add {
+  @extend .p1;
+  @extend .mt2;
+  @extend .br2;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+
+.submit-add {
+  @extend .xxs_-col10;
+  @extend .mb2;
+  @extend .btn--sld-green-L10;
+  @extend .mb2;
+  @extend .py1;
+  @extend .px2;
+  font-size: 1.2rem;
+}
+
+.cancel-add {
+  @extend .xxs_-col10;
+  @extend .btn--sld-red-L5;
+  @extend .mb2;
+  @extend .py1;
+  @extend .px2;
+  font-size: 1.2rem;
+}
+
+.adding-backdrop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 112vh;
+  background-color: #ffffffaa;
+  z-index: 0;;
+}
+
 /* end of channel info */
 
