@@ -39,10 +39,19 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
 
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
-  // for adding channel and friends
+  // for adding channel or friends
   const onSubmitAdd = (evt) => {
     evt.preventDefault();
-    setIsAddingChannel(false)
+    axios({
+      method: "get",
+      url: `${baseURL}/channels?name=${evt.target["add-new"]}`,
+      headers: {
+        ["access-token"]: accessToken,
+        ["client"]: client,
+        ["expiry"]: expiry,
+        ["uid"]: uid,
+      },
+    })
   };
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
@@ -133,19 +142,26 @@ const Chat = ({ accessToken, client, expiry, uid }) => {
         )}
       </div>
         
-        {/* form for adding channels or friends */}
+        {/* form for adding channels and friends*/}
         {
         isAdding && 
         <form className="add" onSubmit={onSubmitAdd}>
-          <div className="input-add-container">
-            <label htmlFor="add-new" className="add-new">New</label>
-            <input type="text" className="input-add" name="add-new" id="add-new"/>
+
+          <div className="input-add-channel-container">
+            <label htmlFor="add-channel" className="add-channel-label">Channel</label>
+            <input type="text" className="input-channel" name="add-channel" id="add-channel"/>
           </div>
+
+          <div className="input-add-user-container">
+            <label htmlFor="add-user" className="add-user-label">User ID: </label>
+            <input type="text" className="input-user" name="add-user" id="add-user"/>
+          </div>
+
           <button className="submit-add" type="submit">save</button>
           <button className="cancel-add" onClick={onClickCancelAdd}>cancel</button>
         </form>
         }
-        {/* backdrop for adding channel or friends */}
+        {/* backdrop for adding channel and friends*/}
         { isAdding && <div className="adding-backdrop"></div>}
     </main>
   );
