@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({ accessToken, client, expiry, uid, isAddingChannel, setIsAddingChannel  }) => {
+const Chat = ({ accessToken, client, expiry, uid }) => {
   const navigate = useNavigate();
+
   const [channel, setChannel] = useState({
     text: [],
     voice: [],
@@ -39,35 +40,10 @@ const Chat = ({ accessToken, client, expiry, uid, isAddingChannel, setIsAddingCh
 
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
-  // for adding channel or friends
-  const onSubmitAdd = (evt) => {
-    evt.preventDefault();
-    const channel = evt.target["add-channel"].value;
-    const user = evt.target["add-user"].value;
-    axios({
-      method: "post",
-      url: `${baseURL}/channels?name=${channel}&user_ids=[${user}]`,
-      mode: "no-cors",
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    });
-    setIsAddingChannel((prevIsAddingChannel) => prevIsAddingChannel + 1);
-    console.log(isAddingChannel);
-    console.log(evt.target["add-channel"].value);
-    console.log(evt.target["add-user"].value);
-    console.log(`${baseURL}/channels?name=${channel}&user_ids=[${user}]`);
-  };
-  const onClickAdd = () => setIsAdding(true);
-  const onClickCancelAdd = () => setIsAdding(false);
-
   // temporary fetching of channels
   const getChannels = () => {
     axios({
-      method: "get",
+      method: "GET",
       url: `${baseURL}/channels?`,
       headers: {
         ["access-token"]: accessToken,
@@ -76,6 +52,7 @@ const Chat = ({ accessToken, client, expiry, uid, isAddingChannel, setIsAddingCh
         ["uid"]: uid,
       },
     }).then((res) => {
+      if(!res.data.data) return;
       const channelsFetch = [];
       res.data.data.forEach((data) => {
         channelsFetch.push(data.name);
@@ -84,9 +61,38 @@ const Chat = ({ accessToken, client, expiry, uid, isAddingChannel, setIsAddingCh
     });
   };
 
+  // for adding channel or friends
+  const onSubmitAdd = async (evt) => {
+    evt.preventDefault();
+    const channelName = evt.target["add-channel"].value;
+    const user = evt.target["add-user"].value;
+    // console.log(localStorage.getItem("access-token")),
+    // console.log(localStorage.getItem("client")),
+    // console.log(localStorage.getItem("expiry")),
+    // console.log(localStorage.getItem("uid")),
+      
+    axios({
+      method: "POST",
+      url: `${baseURL}/channels?name=${channelName}&user_ids=[${user}]`,
+      headers: {
+        "Access-Control-Allow-origin": "*",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
+      },
+    });
+    console.log(channelName);
+    console.log(user);
+    console.log(`${baseURL}/channels?name=${channelName}&user_ids=[${user}]`);
+  };
+  const onClickAdd = () => setIsAdding(true);
+  const onClickCancelAdd = () => setIsAdding(false);
+
   useEffect(() => {
     getChannels();
-  }, [isAddingChannel]);
+  }, []);
 
   return (
     <main className="chat">
