@@ -15,7 +15,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
   });
 
   const [channelTypeRender, setChannelTypeRender] = useState("text");
-
   const [expandedInfo, setExpandedInfo] = useState(false);
   const [isExpanded, setIsExpended] = useState(false);
   // state for adding channel or friend
@@ -29,7 +28,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map((name) => <li className="channel-name" key={name}>#{name}</li>)
+      channelNames.map((name) => <li className="channel-name" key={name}><a href={`#${name}`}>#{name}</a> </li>)
     );
     setChannelTypeRender(evt.target.id);
   };
@@ -123,7 +122,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
         {/* filler */}
         <div className="chat-room-filler"></div>
         {channel[channelTypeRender].map((channelName) => (
-          <div className="chat-room" key={channelName}>
+          <div className="chat-room" key={channelName} id={channelName}>
             <h2>{channelName}</h2>
             <div className="chat-box">messages</div>
           </div>
