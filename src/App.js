@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import Signin from "@components/Signin.jsx";
 import Signup from "@components/Signup.jsx";
 import Chat from "@components/Chat.jsx";
+// import DirectMessage from "./res/components/DirectMessage.jsx";
 import RequiredAuth from "@components/RequiredAuth.jsx";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   toast.configure();
   const [accessToken, setAccessToken] = useState();
   const [client, setClient] = useState();
   const [expiry, setExpiry] = useState();
   const [uid, setUID] = useState();
+  const [usersList, setUsersList] = useState([]);
 
   const setSignInHeaders = {
     setAccessToken,
@@ -27,6 +30,23 @@ const App = () => {
     uid,
   };
 
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.BASEURL}/users`,
+      headers: {
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
+      },
+    }).then((res) => {
+      res.data.data.forEach((user) => {
+        setUsersList((prevUsersList) => ([ ...prevUsersList, user.email]));
+      });
+    })
+  }, []);
+
   return (
     <div>
       <Routes>
@@ -36,7 +56,7 @@ const App = () => {
           path="chat"
           element={
             <RequiredAuth>
-              <Chat {...signInHeaders} />
+              <Chat {...signInHeaders} usersList={usersList}/>
             </RequiredAuth>
           }
         />

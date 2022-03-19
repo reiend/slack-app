@@ -79,6 +79,7 @@
 
 /* chat container */
 .chat-room-container {
+  @extend %scroll-bar;
   @extend .my2;
   @extend .pb1;
   height: 76vh;
@@ -91,7 +92,7 @@
   width: 100%;
   flex-flow: row nowrap;
   scroll-snap-type: x mandatory;
-  @extend %scroll-bar;
+  scroll-behavior: smooth;
 }
 
 
@@ -227,12 +228,16 @@
 }
 
 .channel-name {
-  list-style: none;
-  @extend .txt--black;
-  @extend .my1;
-  font-size: 1.4rem;
-  @extend .fw3;
   width: 100%;
+  @extend .my1;
+  a {
+    @extend .txt--black;
+    @extend .fw3;
+    list-style: none;
+    font-size: 1.4rem;
+    width: 100%;
+    display: block;
+  }
   &:hover {
     @extend .bg--green-L10;
   }
@@ -335,6 +340,7 @@
   background-color: #ffffffaa;
   z-index: 0;;
 }
+
 
 /* end of channel info */
 
