@@ -1,14 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import UsappLogo from "@svg/UsappLogo.jsx";
 import ChatCloudSignup from "@svg/ChatCloudSignup.jsx";
 import "./Signup.scss";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 // const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signup = () => {
+const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -20,6 +20,7 @@ const Signup = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
   const password = useRef({});
   password.current = watch("password", "");
   // Input placeholder animation when focus
@@ -71,7 +72,13 @@ const Signup = () => {
           console.log(error.response.headers);
         }
       });
+    navigate("/chat");
   };
+
+  useEffect(() => {
+    // setIsHiddentSpinner(true);
+    // setIsHiddenRouteContainer(false);
+  }, [])
 
   return (
     <main className="signup">

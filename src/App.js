@@ -2,14 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Signin from "@components/Signin.jsx";
 import Signup from "@components/Signup.jsx";
 import Chat from "@components/Chat.jsx";
-// import DirectMessage from "./res/components/DirectMessage.jsx";
 import RequiredAuth from "@components/RequiredAuth.jsx";
 import { Routes, Route, Outlet } from "react-router-dom";
 import axios from "axios";
-import "./App.scss";
 import { toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
-
+import "./App.scss";
 
 const App = () => {
   toast.configure();
@@ -44,6 +42,9 @@ const App = () => {
   };
 
   useEffect(() => {
+    if(localStorage.getItem("access-token") == undefined) {
+      completeLoad();
+    }
     axios({
       method: "get",
       url: `${process.env.BASEURL}/users`,
@@ -71,7 +72,7 @@ const App = () => {
       <div className="router-container" hidden={isHiddenRouteContainer}>
         <Routes>
           <Route path="/" element={<Signin {...setSignInHeaders} />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="signup" element={<Signup setIsHiddenSpinner={setIsHiddenSpinner} setIsHiddenRouteContainer={setIsHiddenRouteContainer}/>} />
           <Route
             path="chat"
             element={
