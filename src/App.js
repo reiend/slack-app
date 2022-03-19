@@ -5,10 +5,11 @@ import Chat from "@components/Chat.jsx";
 // import DirectMessage from "./res/components/DirectMessage.jsx";
 import RequiredAuth from "@components/RequiredAuth.jsx";
 import { Routes, Route, Outlet } from "react-router-dom";
-import axios from "axios";
-
+import { toast } from "react-toastify";
+import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  toast.configure();
   const [accessToken, setAccessToken] = useState();
   const [client, setClient] = useState();
   const [expiry, setExpiry] = useState();
