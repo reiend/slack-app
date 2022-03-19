@@ -1,0 +1,25 @@
+@import "~@reiend/quirk";
+
+@keyframes spin-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 20px solid #89e0c0;
+  border-top: 20px solid #3bcf93,;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: 500ms linear infinite spin-loading;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
