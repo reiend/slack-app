@@ -57,30 +57,46 @@
   @extend .xxs_-col10;
   @extend .s_-col4;
   @extend .my2;
+  position: relative;
 }
 
 .lastname {
   @extend .xxs_-col10;
   @extend .s_-col4;
   @extend .my2;
+  position: relative;
 }
 
 .email-signup {
   @extend .xxs_-col10;
   @extend .s_-col10;
   @extend .my2;
+  position: relative;
 }
 
 .password-signup {
   @extend .xxs_-col10;
   @extend .s_-col4;
   @extend .my2;
+  position: relative;
 }
 
 .password-retype {
   @extend .xxs_-col10;
   @extend .s_-col4;
   @extend .my2;
+  position: relative;
+}
+
+.firstname-errors,
+.lastname-errors,
+.email-errors,
+.password-errors,
+.password-retype-errors
+{
+  position: absolute;
+  bottom: -20px;
+  @extend .txt--white;
 }
 
 .signup-btn {
