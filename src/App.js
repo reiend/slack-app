@@ -7,8 +7,12 @@ import RequiredAuth from "@components/RequiredAuth.jsx";
 import { Routes, Route, Outlet } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
+import { toast } from "react-toastify";
+import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
+
 
 const App = () => {
+  toast.configure();
   const [accessToken, setAccessToken] = useState();
   const [client, setClient] = useState();
   const [expiry, setExpiry] = useState();
