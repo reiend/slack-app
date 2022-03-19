@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./DirectMessage.scss";
 
-const DirectMessage = ({ usersList, onClickCancelAdd }) => {
+const DirectMessage = ({ usersList, onClickCancelAdd, setChannel, usersListID }) => {
   const [usersListFilter, setUsersListFilter] = useState(null);
 
   const inputReceiverRef = useRef(null);
@@ -11,7 +11,10 @@ const DirectMessage = ({ usersList, onClickCancelAdd }) => {
   const onSubmitSend = (evt) => {
     evt.preventDefault();
     const message = (evt.target["send-message"].value);
-    const userID = (usersList.indexOf(evt.target["send-user"].value) + 1);
+    const userEmailIndex = (usersList.indexOf(evt.target["send-user"].value));
+    const userID = usersListID[userEmailIndex];
+    const emails = [ `${evt.target["send-user"].value}`];
+    console.log(userID);
     axios({
       method: "POST",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User&body=${message}`,
@@ -24,6 +27,7 @@ const DirectMessage = ({ usersList, onClickCancelAdd }) => {
     }).then((res)=> {
       console.log("Sending friend message status: ", res.request.status);
     });
+    setChannel((prevChannel) => ({...prevChannel, direct: emails}));
     evt.target["send-message"].value = "";
   };
 
@@ -36,9 +40,6 @@ const DirectMessage = ({ usersList, onClickCancelAdd }) => {
       setUsersListFilter(null);
     } else {
       const filteredUser = usersList.filter(
-        // filter by letters
-        // (user) => parseInt(user.indexOf(evt.target.value)) !== -1
-        //filter by first letter
         (user) => user.startsWith(evt.target.value)
       );
       setUsersListFilter(

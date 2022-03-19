@@ -5,7 +5,7 @@ import axios from "axios";
 import "./Chat.scss";
 
 const baseURL = "http://206.189.91.54/api/v1/";
-const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
+const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const navigate = useNavigate();
 
   const [channel, setChannel] = useState({
@@ -28,8 +28,10 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map((name) => <li className="channel-name" key={name}><a href={`#${name}`}>#{name}</a> </li>)
+      channelNames.map((name, i) => <li className="channel-name" key={`${name}-${i}`}><a href={`#${name}`}>#{name}</a> </li>)
     );
+    console.log(channelType);
+    console.log(evt.target.id);
     setChannelTypeRender(evt.target.id);
   };
 
@@ -43,7 +45,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
 
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
-  // temporary fetching of channels
+  // fetching of channels
   const getChannels = () => {
     axios({
       method: "GET",
@@ -61,6 +63,31 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
         channelsFetch.push(data.name);
       });
       setChannel((prevChannel) => ({ ...prevChannel, text: channelsFetch }));
+    });
+  };
+
+  // fetching of directe messages
+  const getDirects = () => {
+    const userEmailIndex = (usersList.indexOf(uid));
+    const userID = usersListID[userEmailIndex];
+    axios({
+      method: "GET",
+      url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
+      headers: {
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
+      },
+    }).then((res)=> {
+      if(res.data.data !== undefined) {
+        console.log(res.data.data);
+        const receiver = [];
+        res.data.data.forEach((data) => {
+          receiver.push(data.receiver.uid);
+        });
+        setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
+      }
     });
   };
 
@@ -96,14 +123,10 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
-  // filter user list
-  const onChangeFilterUser = (evt) => {
-    console.log(evt);
-  };
-
   useEffect(() => {
     getChannels();
-  }, [channel.text.length, channelTypeRender]);
+    getDirects();
+  }, [channel.text.length, channelTypeRender, channel.direct.length]);
 
   return (
     <main className="chat">
@@ -121,8 +144,8 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
         {/* render channels here */}
         {/* filler */}
         <div className="chat-room-filler"></div>
-        {channel[channelTypeRender].map((channelName) => (
-          <div className="chat-room" key={channelName} id={channelName}>
+        {channel[channelTypeRender].map((channelName, i) => (
+          <div className="chat-room" key={channelName + i} id={channelName}>
             <h2>{channelName}</h2>
             <div className="chat-box">messages</div>
           </div>
@@ -205,7 +228,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList }) => {
       )}
 
       {isAdding && channelTypeRender === "direct"  && 
-        <DirectMessage usersList={usersList} onClickCancelAdd={onClickCancelAdd} />
+        <DirectMessage usersList={usersList} usersListID={usersListID} onClickCancelAdd={onClickCancelAdd} setChannel={setChannel}/>
       }
       {/* backdrop for adding channel and friends*/}
       {isAdding && <div className="adding-backdrop"></div>}
