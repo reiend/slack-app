@@ -109,7 +109,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
               },
             })}
           />
-          <p>{errors.firstname?.message}</p>
+          <p className="firstname-errors">{errors.firstname?.message}</p>
         </div>
         <div className="lastname">
           <label
@@ -135,7 +135,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
               },
             })}
           />
-          <p>{errors.lastname?.message}</p>
+          <p className="lastname-errors">{errors.lastname?.message}</p>
         </div>
         <div className="email-signup">
           <label
@@ -155,7 +155,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             onChange={onChangeInput}
             {...register("email", { required: "an email is required" })}
           />
-          <p>{errors.email?.message}</p>
+          <p className="email-errors">{errors.email?.message}</p>
         </div>
         <div className="password-signup">
           <label
@@ -185,7 +185,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
               },
             })}
           />
-          <p>{errors.password?.message}</p>
+          <p className="password-errors">{errors.password?.message}</p>
         </div>
         <div className="password-retype">
           <label
@@ -208,7 +208,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
                 value === password.current || "The passwords do not match",
             })}
           />
-          <p>{errors.password_retype?.message}</p>
+          <p className="password-retype-errors">{errors.password_retype?.message}</p>
         </div>
         <button type="submit" className="signup-btn">
           Sign up
