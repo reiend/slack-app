@@ -26,17 +26,19 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
   // Input placeholder animation when focus
   const onChangeInput = (event) => {
     const target = event.target;
-
+    console.log(target.name);
     if (target.name === "firstname") {
       if (target.value) setHasInputFirstname(true);
       else setHasInputFirstname(false);
     } else if (target.name === "lastname") {
       if (target.value) setHasInputLastname(true);
       else setHasInputLastname(false);
-    } else if (target.name === "email_signup") {
+    } else if (target.name === "email") {
+      console.log("hello changing email");
       if (target.value) setHasInputEmailSignup(true);
       else setHasInputEmailSignup(false);
-    } else if (target.name === "password_signup") {
+    } else if (target.name === "password") {
+      console.log("hello changing password");
       if (target.value) setHasInputPasswordSignup(true);
       else setHasInputPasswordSignup(false);
     } else if (target.name === "password_retype") {
@@ -100,7 +102,6 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             type="text"
             name="firstname"
             id="firstname"
-            onChange={onChangeInput}
             {...register("firstname", {
               required: "This is required",
               maxLength: {
@@ -108,6 +109,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
                 message: "Whoah there! too many characters!",
               },
             })}
+            onChange={onChangeInput}
           />
           <p className="firstname-errors">{errors.firstname?.message}</p>
         </div>
@@ -126,7 +128,6 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             type="text"
             name="lastname"
             id="lastname"
-            onChange={onChangeInput}
             {...register("lastname", {
               required: "This is required",
               maxLength: {
@@ -134,6 +135,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
                 message: "Whoah there! too many characters!",
               },
             })}
+            onChange={onChangeInput}
           />
           <p className="lastname-errors">{errors.lastname?.message}</p>
         </div>
@@ -152,8 +154,8 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             type="email"
             name="email_signup"
             id="email-signup"
-            onChange={onChangeInput}
             {...register("email", { required: "an email is required" })}
+            onChange={onChangeInput}
           />
           <p className="email-errors">{errors.email?.message}</p>
         </div>
@@ -172,7 +174,6 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             type="password"
             name="password_signup"
             id="password-signup"
-            onChange={onChangeInput}
             {...register("password", {
               required: "This is required",
               maxLength: {
@@ -184,6 +185,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
                 message: "Password must at least have 8 characters",
               },
             })}
+            onChange={onChangeInput}
           />
           <p className="password-errors">{errors.password?.message}</p>
         </div>
@@ -202,11 +204,11 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             type="password"
             name="password_retype"
             id="password-retype"
-            onChange={onChangeInput}
             {...register("password_retype", {
               validate: (value) =>
                 value === password.current || "The passwords do not match",
             })}
+            onChange={onChangeInput}
           />
           <p className="password-retype-errors">{errors.password_retype?.message}</p>
         </div>
