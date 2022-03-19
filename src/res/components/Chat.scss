@@ -120,7 +120,7 @@
       font-size: clamp(0.9rem, 1.4vw, 1.2rem);
     }
     @include s {
-      font-size: clamp(0.6rem, 1.9vw, 1.2rem);
+      font-size: clamp(1rem, 1.9vw, 1.2rem);
       list-style: none;
       cursor: pointer;
         &:hover {
@@ -199,6 +199,13 @@
 }
 
 .chat-room-filler {
+  @include xxs {
+    display: none;
+  }
+
+  @include l {
+    display: flex;
+  }
   @extend %chat-room-size;
   background: none;
 }
@@ -209,8 +216,14 @@
   @extend .br2;
   @extend .p2;
   height: 10vh;
-  width: 47.5vw;
-  
+
+  @include xxs {
+    width: 100%;
+  }
+
+  @include m {
+    width: 47.5vw;
+  }
 }
 
 .channel-info-container-expanded {
