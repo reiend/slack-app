@@ -20,7 +20,7 @@
 
 /* navigation */
 .chat {
-  @extend .box10;
+  width: 100%;
   font-family: "Roboto", sans-serif;
   position: relative;
   max-height: 1200px;
@@ -165,7 +165,8 @@
   height: 100%;
   flex: none;
   scroll-snap-align: center;
-  min-width: 450px;
+  width: 100%;
+  max-width: 450px;
 }
 
 %w-100 {

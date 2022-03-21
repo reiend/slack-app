@@ -43,6 +43,10 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
         localStorage.setItem("client", res.headers["client"]);
         localStorage.setItem("expiry", res.headers["expiry"]);
         localStorage.setItem("uid", res.headers["uid"]);
+
+        // localStorage.setItem("firstname", evt.target["firstname"]);
+        // localStorage.setItem("lastname", );
+
         navigate("/chat");
         toast(`Welcome back!`, {
           position: "top-right",

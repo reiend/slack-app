@@ -35,49 +35,62 @@ const App = () => {
     uid,
   };
 
-
   const completeLoad = () => {
-    setIsHiddenSpinner(true)
-    setIsHiddenRouteContainer(false)
+    setIsHiddenSpinner(true);
+    setIsHiddenRouteContainer(false);
   };
 
-  useEffect(() => {
-    if(localStorage.getItem("access-token") == undefined) {
+  useEffect(async () => {
+    if (localStorage.getItem("access-token") == undefined) {
       completeLoad();
+      return;
     }
-    axios({
-      method: "get",
-      url: `${process.env.BASEURL}/users`,
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    }).then((res) => {
-      res.data.data.forEach((user) => {
-        setUsersList((prevUsersList) => ([ ...prevUsersList, user.email]));
-        completeLoad();
+
+    const getUserInfo = async () => {
+      axios({
+        method: "get",
+        url: `${process.env.BASEURL}/users`,
+        headers: {
+          ["access-token"]: localStorage.getItem("access-token"),
+          ["client"]: localStorage.getItem("client"),
+          ["expiry"]: localStorage.getItem("expiry"),
+          ["uid"]: localStorage.getItem("uid"),
+        },
+      }).then((res) => {
+        res.data.data.forEach((user) => {
+          setUsersList((prevUsersList) => [...prevUsersList, user.email]);
+          completeLoad();
+        });
+        res.data.data.forEach((user) => {
+          setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
+          completeLoad();
+        });
       });
-      res.data.data.forEach((user) => {
-        setUsersListID((prevUsersListID) => ([ ...prevUsersListID, user.id]));
-        completeLoad();
-      });
-    })
+    };
+    await getUserInfo();
   }, []);
 
   return (
     <div className="app-container">
-      <div className="spinner" hidden={isHiddenSpinner}/>
+      <div className="spinner" hidden={isHiddenSpinner} />
       <div className="router-container" hidden={isHiddenRouteContainer}>
         <Routes>
           <Route path="/" element={<Signin {...setSignInHeaders} />} />
-          <Route path="signup" element={<Signup setIsHiddenSpinner={setIsHiddenSpinner} setIsHiddenRouteContainer={setIsHiddenRouteContainer}/>} />
+          <Route
+            path="signup"
+            element={
+              <Signup {...setSignInHeaders} />
+            }
+          />
           <Route
             path="chat"
             element={
               <RequiredAuth>
-                <Chat {...signInHeaders} usersList={usersList} usersListID={usersListID}/>
+                <Chat
+                  {...signInHeaders}
+                  usersList={usersList}
+                  usersListID={usersListID}
+                />
               </RequiredAuth>
             }
           />

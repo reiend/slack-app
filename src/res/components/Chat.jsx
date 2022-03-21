@@ -4,7 +4,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
-const baseURL = "http://206.189.91.54/api/v1/";
 const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const navigate = useNavigate();
 
@@ -30,8 +29,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
     setExpandedInfo(
       channelNames.map((name, i) => <li className="channel-name" key={`${name}-${i}`}><a href={`#${name}`}>#{name}</a> </li>)
     );
-    console.log(channelType);
-    console.log(evt.target.id);
     setChannelTypeRender(evt.target.id);
   };
 
@@ -46,10 +43,10 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
   // fetching of channels
-  const getChannels = () => {
+  const getChannels = async () => {
     axios({
       method: "GET",
-      url: `${baseURL}/channels?`,
+      url: `${process.env.BASEURL}channels?`,
       headers: {
         ["access-token"]: accessToken,
         ["client"]: client,
@@ -66,8 +63,30 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
     });
   };
 
+  const getChannelsMessages = async () => {
+    // console.log((localStorage.getItem("uid")));
+    // console.log(usersList);
+    // console.log(usersList.indexOf(localStorage.getItem("uid")));
+    const userEmailIndex = uid? uid : usersList.indexOf(localStorage.getItem("uid"));
+    const userID = usersListID[userEmailIndex];
+    // console.log(userEmailIndex);
+    // console.log(usersListID);
+    axios({
+      method: "GET",
+      url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=Channel`,
+      headers: {
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
+      },
+    }).then((res)=> {
+      console.log(res);
+    });
+  };
+
   // fetching of directe messages
-  const getDirects = () => {
+  const getDirects = async () => {
     const userEmailIndex = (usersList.indexOf(uid));
     const userID = usersListID[userEmailIndex];
     axios({
@@ -81,7 +100,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
       },
     }).then((res)=> {
       if(res.data.data !== undefined) {
-        console.log(res.data.data);
         const receiver = [];
         res.data.data.forEach((data) => {
           receiver.push(data.receiver.uid);
@@ -123,9 +141,11 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
-  useEffect(() => {
-    getChannels();
-    getDirects();
+  useEffect(async () => {
+    await getChannels();
+    await getChannelsMessages();
+    await getChannelsMessages();
+    await getDirects();
   }, [channel.text.length, channelTypeRender, channel.direct.length]);
 
   return (

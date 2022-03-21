@@ -6,9 +6,14 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-// const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
+const Signup = ({
+  setAccessToken,
+  setClient,
+  setExpiry,
+  setUID,
+}) => {
+
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -26,7 +31,6 @@ const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
   // Input placeholder animation when focus
   const onChangeInput = (event) => {
     const target = event.target;
-    console.log(target.name);
     if (target.name === "firstname") {
       if (target.value) setHasInputFirstname(true);
       else setHasInputFirstname(false);
@@ -34,11 +38,9 @@ const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
       if (target.value) setHasInputLastname(true);
       else setHasInputLastname(false);
     } else if (target.name === "email") {
-      console.log("hello changing email");
       if (target.value) setHasInputEmailSignup(true);
       else setHasInputEmailSignup(false);
     } else if (target.name === "password") {
-      console.log("hello changing password");
       if (target.value) setHasInputPasswordSignup(true);
       else setHasInputPasswordSignup(false);
     } else if (target.name === "password_retype") {
@@ -48,6 +50,7 @@ const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
   };
   const handleSignUp = (data, e) => {
     e.preventDefault();
+
     axios
       .post(`${process.env.BASEURL}auth?`, {
         email: data.email,
@@ -55,11 +58,18 @@ const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
         password_confirmation: data.password_confirmation,
       })
       .then((res) => {
-        console.log(res);
+        setAccessToken(res.headers["access-token"]);
+        setClient(res.headers["client"]);
+        setExpiry(res.headers["expiry"]);
+        setUID(res.headers["uid"]);
+
         localStorage.setItem("access-token", res.headers["access-token"]);
         localStorage.setItem("client", res.headers["client"]);
         localStorage.setItem("expiry", res.headers["expiry"]);
         localStorage.setItem("uid", res.headers["uid"]);
+
+        navigate("/chat");
+
       })
       .catch((error) => {
         if (error.response) {
