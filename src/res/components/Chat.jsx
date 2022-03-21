@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DirectMessage from "@components/DirectMessage.jsx";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
-const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
+const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   const navigate = useNavigate();
 
   const [channel, setChannel] = useState({
@@ -27,8 +27,13 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map((name, i) => <li className="channel-name" key={`${name}-${i}`}><a href={`#${name}`}>#{name}</a> </li>)
+      channelNames.map((name, i) => (
+        <li className="channel-name" key={`${name}-${i}`}>
+          <a href={`#${name}`}>#{name}</a>{" "}
+        </li>
+      ))
     );
+    console.log(evt.target.id);
     setChannelTypeRender(evt.target.id);
   };
 
@@ -43,7 +48,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
   // fetching of channels
-  const getChannels = async () => {
+  const getChannels = () => {
     axios({
       method: "GET",
       url: `${process.env.BASEURL}channels?`,
@@ -63,11 +68,13 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
     });
   };
 
-  const getChannelsMessages = async () => {
+  const getChannelsMessages = () => {
     // console.log((localStorage.getItem("uid")));
     // console.log(usersList);
     // console.log(usersList.indexOf(localStorage.getItem("uid")));
-    const userEmailIndex = uid? uid : usersList.indexOf(localStorage.getItem("uid"));
+    const userEmailIndex = uid
+      ? uid
+      : usersList.indexOf(localStorage.getItem("uid"));
     const userID = usersListID[userEmailIndex];
     // console.log(userEmailIndex);
     // console.log(usersListID);
@@ -80,15 +87,15 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    }).then((res)=> {
+    }).then((res) => {
       console.log(res);
     });
   };
 
   // fetching of directe messages
-  const getDirects = async () => {
-    const userEmailIndex = (usersList.indexOf(uid));
-    const userID = usersListID[userEmailIndex];
+  const getDirects = () => {
+    const userEmail = uid? uid : localStorage.getItem("uid");
+    const userID = usersListID[usersList.indexOf(userEmail)];
     axios({
       method: "GET",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
@@ -98,19 +105,20 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    }).then((res)=> {
-      if(res.data.data !== undefined) {
+    }).then((res) => {
+      if (res.data.data !== undefined) {
         const receiver = [];
         res.data.data.forEach((data) => {
           receiver.push(data.receiver.uid);
         });
         setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
       }
+      console.log("test", res.data);
     });
   };
 
   // for adding channel or friends
-  const onSubmitAdd = (evt) => {
+  const onSubmitAdd = useCallback((evt) => {
     evt.preventDefault();
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
@@ -133,20 +141,18 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
           ["expiry"]: localStorage.getItem("expiry"),
           ["uid"]: localStorage.getItem("uid"),
         },
-      })
+      });
       getChannels();
-    })
-  };
+    });
+  }, [channel.text.length]);
 
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
-  useEffect(async () => {
-    await getChannels();
-    await getChannelsMessages();
-    await getChannelsMessages();
-    await getDirects();
-  }, [channel.text.length, channelTypeRender, channel.direct.length]);
+  useEffect(() => {
+    getChannels();
+    getDirects();
+  }, []);
 
   return (
     <main className="chat">
@@ -187,7 +193,12 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
           aria-label="channel-Info"
         >
           {Object.keys(channel).map((type) => (
-            <h2 className="channel-type" onClick={onClickChannelInfoExpand} key={type} id={type}>
+            <h2
+              className="channel-type"
+              onClick={onClickChannelInfoExpand}
+              key={type}
+              id={type}
+            >
               {type} channel
             </h2>
           ))}
@@ -212,8 +223,8 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
 
       {/* form for adding channels and friends*/}
 
-      {isAdding && channelTypeRender === "text"  && (
-        <form className="add" onSubmit={onSubmitAdd} >
+      {isAdding && channelTypeRender === "text" && (
+        <form className="add" onSubmit={onSubmitAdd}>
           <div className="input-add-channel-container">
             <label htmlFor="add-channel" className="add-channel-label">
               Channel
@@ -247,9 +258,16 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         </form>
       )}
 
-      {isAdding && channelTypeRender === "direct"  && 
-        <DirectMessage usersList={usersList} usersListID={usersListID} onClickCancelAdd={onClickCancelAdd} setChannel={setChannel}/>
-      }
+      {isAdding && channelTypeRender === "direct" && (
+        <DirectMessage
+          usersList={usersList}
+          usersListID={usersListID}
+          onClickCancelAdd={onClickCancelAdd}
+          setChannel={setChannel}
+          channel={channel}
+          getDirects={getDirects}
+        />
+      )}
       {/* backdrop for adding channel and friends*/}
       {isAdding && <div className="adding-backdrop"></div>}
     </main>

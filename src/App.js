@@ -45,7 +45,6 @@ const App = () => {
       completeLoad();
       return;
     }
-
     const getUserInfo = async () => {
       axios({
         method: "get",
@@ -61,6 +60,7 @@ const App = () => {
           setUsersList((prevUsersList) => [...prevUsersList, user.email]);
           completeLoad();
         });
+        console.log(res.data.data);
         res.data.data.forEach((user) => {
           setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
           completeLoad();

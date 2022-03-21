@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./DirectMessage.scss";
 
-const DirectMessage = ({ usersList, onClickCancelAdd, setChannel, usersListID }) => {
+const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, getDirects, channel}) => {
   const [usersListFilter, setUsersListFilter] = useState(null);
-
   const inputReceiverRef = useRef(null);
 
   const onSubmitSend = (evt) => {
     evt.preventDefault();
+
     const message = (evt.target["send-message"].value);
-    const userEmailIndex = (usersList.indexOf(evt.target["send-user"].value));
+    const email =  `${evt.target["send-user"].value}`;
+
+    const userEmailIndex = (usersList.indexOf(email));
     const userID = usersListID[userEmailIndex];
-    const emails = [ `${evt.target["send-user"].value}`];
+    console.log(userID, email);
     axios({
       method: "POST",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User&body=${message}`,
@@ -24,9 +26,15 @@ const DirectMessage = ({ usersList, onClickCancelAdd, setChannel, usersListID })
         ["uid"]: localStorage.getItem("uid"),
       },
     }).then((res)=> {
-      console.log("Sending friend message status: ", res.request.status);
+      setChannel((prevChannel) => {
+        console.log(updatedDirects);
+        console.log(res);
+        const updatedDirects = [...prevChannel.direct, email];
+        const newChannelsInfo = {...prevChannel, direct: updatedDirects};
+        return newChannelsInfo;
+      });
     });
-    setChannel((prevChannel) => ({...prevChannel, direct: emails}));
+    getDirects();
     evt.target["send-message"].value = "";
   };
 
