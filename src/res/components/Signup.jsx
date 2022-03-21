@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 // const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
+const Signup = ({ setIsHiddentSpinner, setIsHiddenRouteContainer }) => {
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -56,6 +56,10 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
       })
       .then((res) => {
         console.log(res);
+        localStorage.setItem("access-token", res.headers["access-token"]);
+        localStorage.setItem("client", res.headers["client"]);
+        localStorage.setItem("expiry", res.headers["expiry"]);
+        localStorage.setItem("uid", res.headers["uid"]);
       })
       .catch((error) => {
         if (error.response) {
@@ -75,12 +79,21 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
         }
       });
     navigate("/chat");
+    toast(`Welcome!`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   useEffect(() => {
     // setIsHiddentSpinner(true);
     // setIsHiddenRouteContainer(false);
-  }, [])
+  }, []);
 
   return (
     <main className="signup">
@@ -210,7 +223,9 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
             })}
             onChange={onChangeInput}
           />
-          <p className="password-retype-errors">{errors.password_retype?.message}</p>
+          <p className="password-retype-errors">
+            {errors.password_retype?.message}
+          </p>
         </div>
         <button type="submit" className="signup-btn">
           Sign up
