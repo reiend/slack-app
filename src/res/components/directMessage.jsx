@@ -14,7 +14,6 @@ const DirectMessage = ({ usersList, onClickCancelAdd, setChannel, usersListID })
     const userEmailIndex = (usersList.indexOf(evt.target["send-user"].value));
     const userID = usersListID[userEmailIndex];
     const emails = [ `${evt.target["send-user"].value}`];
-    console.log(userID);
     axios({
       method: "POST",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User&body=${message}`,

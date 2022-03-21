@@ -8,7 +8,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 // const baseURL = "http://206.189.91.54/api/v1/";
 
-const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
+const Signup = ({
+  setAccessToken,
+  setClient,
+  setExpiry,
+  setUID,
+}) => {
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -53,7 +58,15 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
         password_confirmation: data.password_confirmation,
       })
       .then((res) => {
-        console.log(res);
+        setAccessToken(res.headers["access-token"]);
+        setClient(res.headers["client"]);
+        setExpiry(res.headers["expiry"]);
+        setUID(res.headers["uid"]);
+        localStorage.setItem("access-token", res.headers["access-token"]);
+        localStorage.setItem("client", res.headers["client"]);
+        localStorage.setItem("expiry", res.headers["expiry"]);
+        localStorage.setItem("uid", res.headers["uid"]);
+        navigate("/chat");
       })
       .catch((error) => {
         if (error.response) {
@@ -72,12 +85,6 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
           console.log(error.response.headers);
         }
       });
-
-    console.log(e.target.firstname);
-    console.log(e.target.lastname);
-    console.log(e.target);
-
-    navigate("/chat");
   };
 
   useEffect(() => {
