@@ -6,7 +6,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-// const baseURL = "http://206.189.91.54/api/v1/";
 
 const Signup = ({
   setAccessToken,
@@ -14,6 +13,7 @@ const Signup = ({
   setExpiry,
   setUID,
 }) => {
+
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -62,11 +62,14 @@ const Signup = ({
         setClient(res.headers["client"]);
         setExpiry(res.headers["expiry"]);
         setUID(res.headers["uid"]);
+
         localStorage.setItem("access-token", res.headers["access-token"]);
         localStorage.setItem("client", res.headers["client"]);
         localStorage.setItem("expiry", res.headers["expiry"]);
         localStorage.setItem("uid", res.headers["uid"]);
+
         navigate("/chat");
+
       })
       .catch((error) => {
         if (error.response) {
@@ -85,12 +88,22 @@ const Signup = ({
           console.log(error.response.headers);
         }
       });
+    navigate("/chat");
+    toast(`Welcome!`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   useEffect(() => {
     // setIsHiddentSpinner(true);
     // setIsHiddenRouteContainer(false);
-  }, [])
+  }, []);
 
   return (
     <main className="signup">
@@ -220,7 +233,9 @@ const Signup = ({
             })}
             onChange={onChangeInput}
           />
-          <p className="password-retype-errors">{errors.password_retype?.message}</p>
+          <p className="password-retype-errors">
+            {errors.password_retype?.message}
+          </p>
         </div>
         <button type="submit" className="signup-btn">
           Sign up
