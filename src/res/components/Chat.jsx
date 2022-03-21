@@ -4,7 +4,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
-const baseURL = "http://206.189.91.54/api/v1/";
 const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const navigate = useNavigate();
 
@@ -49,7 +48,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const getChannels = () => {
     axios({
       method: "GET",
-      url: `${baseURL}/channels?`,
+      url: `${process.env.BASEURL}channels?`,
       headers: {
         ["access-token"]: accessToken,
         ["client"]: client,

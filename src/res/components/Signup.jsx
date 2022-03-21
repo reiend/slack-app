@@ -26,7 +26,6 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
   // Input placeholder animation when focus
   const onChangeInput = (event) => {
     const target = event.target;
-    console.log(target.name);
     if (target.name === "firstname") {
       if (target.value) setHasInputFirstname(true);
       else setHasInputFirstname(false);
@@ -34,11 +33,9 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
       if (target.value) setHasInputLastname(true);
       else setHasInputLastname(false);
     } else if (target.name === "email") {
-      console.log("hello changing email");
       if (target.value) setHasInputEmailSignup(true);
       else setHasInputEmailSignup(false);
     } else if (target.name === "password") {
-      console.log("hello changing password");
       if (target.value) setHasInputPasswordSignup(true);
       else setHasInputPasswordSignup(false);
     } else if (target.name === "password_retype") {
@@ -48,6 +45,7 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
   };
   const handleSignUp = (data, e) => {
     e.preventDefault();
+
     axios
       .post(`${process.env.BASEURL}auth?`, {
         email: data.email,
@@ -74,6 +72,11 @@ const Signup = ({setIsHiddentSpinner, setIsHiddenRouteContainer}) => {
           console.log(error.response.headers);
         }
       });
+
+    console.log(e.target.firstname);
+    console.log(e.target.lastname);
+    console.log(e.target);
+
     navigate("/chat");
   };
 

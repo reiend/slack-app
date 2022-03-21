@@ -44,6 +44,7 @@ const App = () => {
   useEffect(() => {
     if(localStorage.getItem("access-token") == undefined) {
       completeLoad();
+      return;
     }
     axios({
       method: "get",
