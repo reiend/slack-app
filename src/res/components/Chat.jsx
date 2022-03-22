@@ -33,7 +33,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         </li>
       ))
     );
-    console.log(evt.target.id);
     setChannelTypeRender(evt.target.id);
   };
 
@@ -69,15 +68,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   };
 
   const getChannelsMessages = () => {
-    // console.log((localStorage.getItem("uid")));
-    // console.log(usersList);
-    // console.log(usersList.indexOf(localStorage.getItem("uid")));
-    const userEmailIndex = uid
-      ? uid
-      : usersList.indexOf(localStorage.getItem("uid"));
-    const userID = usersListID[userEmailIndex];
-    // console.log(userEmailIndex);
-    // console.log(usersListID);
+    const userID = localStorage.getItem("id")
     axios({
       method: "GET",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=Channel`,
@@ -92,29 +83,30 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     });
   };
 
+
   // fetching of directe messages
   const getDirects = () => {
-    const userEmail = uid? uid : localStorage.getItem("uid");
-    const userID = usersListID[usersList.indexOf(userEmail)];
-    axios({
-      method: "GET",
-      url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    }).then((res) => {
-      if (res.data.data !== undefined) {
-        const receiver = [];
-        res.data.data.forEach((data) => {
-          receiver.push(data.receiver.uid);
-        });
-        setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
-      }
-      console.log("test", res.data);
-    });
+    const userID = localStorage.getItem("id");
+    if(userID) {
+      axios({
+        method: "GET",
+        url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
+        headers: {
+          ["access-token"]: localStorage.getItem("access-token"),
+          ["client"]: localStorage.getItem("client"),
+          ["expiry"]: localStorage.getItem("expiry"),
+          ["uid"]: localStorage.getItem("uid"),
+        },
+      }).then((res) => {
+        if (res.data.data !== undefined) {
+          const receiver = [];
+          res.data.data.forEach((data) => {
+            receiver.push(data.receiver.uid);
+          });
+          setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
+        }
+      });
+    }
   };
 
   // for adding channel or friends
@@ -152,12 +144,17 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   useEffect(() => {
     getChannels();
     getDirects();
+    getChannelsMessages();
   }, []);
 
+  const FIRST_LETTER = 0;
   return (
     <main className="chat">
       <nav className="account" aria-label="account-info">
-        <span className="profile">JL</span>
+        <span className="profile">
+          { localStorage.getItem("firstname")[FIRST_LETTER] }
+          { localStorage.getItem("lastname")[FIRST_LETTER] }
+        </span>
         <ul className="account-info">
           <li>Friends</li>
           <li>Settings</li>
@@ -173,7 +170,15 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         {channel[channelTypeRender].map((channelName, i) => (
           <div className="chat-room" key={channelName + i} id={channelName}>
             <h2>{channelName}</h2>
-            <div className="chat-box">messages</div>
+            <div className="chat-box">
+              <div className="chat-messages">messages</div>
+              <form className="message-form">
+                <div>
+                  <input type="text" className="message" id="message" name="message"/>
+                  <label htmlFor="message">Send</label> 
+                </div>
+              </form>
+            </div>
           </div>
         ))}
         {/* filler */}

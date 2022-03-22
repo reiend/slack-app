@@ -15,7 +15,7 @@ const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, ge
 
     const userEmailIndex = (usersList.indexOf(email));
     const userID = usersListID[userEmailIndex];
-    console.log(userID, email);
+    // console.log(userID, email);
     axios({
       method: "POST",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User&body=${message}`,
@@ -27,8 +27,8 @@ const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, ge
       },
     }).then((res)=> {
       setChannel((prevChannel) => {
-        console.log(updatedDirects);
-        console.log(res);
+        // console.log(updatedDirects);
+        // console.log(res);
         const updatedDirects = [...prevChannel.direct, email];
         const newChannelsInfo = {...prevChannel, direct: updatedDirects};
         return newChannelsInfo;

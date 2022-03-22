@@ -63,6 +63,9 @@ const Signup = ({
         setExpiry(res.headers["expiry"]);
         setUID(res.headers["uid"]);
 
+        localStorage.setItem("id", res.data.data["id"]);
+        localStorage.setItem("firstname", e.target["firstname"].value);
+        localStorage.setItem("lastname", e.target["lastname"].value);
         localStorage.setItem("access-token", res.headers["access-token"]);
         localStorage.setItem("client", res.headers["client"]);
         localStorage.setItem("expiry", res.headers["expiry"]);
