@@ -179,6 +179,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  scroll-behavior: smooth;
   h2 {
     @extend .bg--green-L3;
     @extend %w-100;
@@ -196,6 +197,7 @@
     @extend .p1;
     @extend .br2;
     height: 90%;
+    position: relative;
   }
 }
 
@@ -210,6 +212,20 @@
   @extend %chat-room-size;
   background: none;
 }
+.messages-container {
+  height: 90%;
+  border: 1px solid black;
+}
+
+.messages-form {
+  width: 100%;
+  height: 10%;
+  scroll-behavior: smooth;
+  ul {
+    width: 100%;
+  }
+}  
+
 
 /* end of chat container */
 .channel-info-container {
@@ -419,7 +435,6 @@
   background-color: #ffffffaa;
   z-index: 0;;
 }
-
-
 /* end of channel info */
+
 

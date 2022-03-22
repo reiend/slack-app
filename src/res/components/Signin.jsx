@@ -39,6 +39,8 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
         setClient(res.headers["client"]);
         setExpiry(res.headers["expiry"]);
         setUID(res.headers["uid"]);
+
+        localStorage.setItem("id", res.data.data.id);
         localStorage.setItem("access-token", res.headers["access-token"]);
         localStorage.setItem("client", res.headers["client"]);
         localStorage.setItem("expiry", res.headers["expiry"]);

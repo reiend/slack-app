@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
+const FIRST_LETTER = 0;
+const CHANNEL_NAME = 0;
+const CHANNEL_ID = 1;
+const CHANNEL_MESSAGES = 2;
+
+const getRandomNumber = () => Math.floor(Math.random() * 3000);
+
 const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   const navigate = useNavigate();
 
@@ -16,24 +23,28 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   const [channelTypeRender, setChannelTypeRender] = useState("text");
   const [expandedInfo, setExpandedInfo] = useState(false);
   const [isExpanded, setIsExpended] = useState(false);
+
   // state for adding channel or friend
   const [isAdding, setIsAdding] = useState(false);
 
   const onClickChannelInfoExpand = (evt) => {
     setIsExpended(true);
+    setChannelTypeRender(evt.target.id);
+
     const FIRST_WORD = 0;
     const channelType = evt.target.innerText
       .split(" ")
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
+
     setExpandedInfo(
       channelNames.map((name, i) => (
-        <li className="channel-name" key={`${name}-${i}`}>
-          <a href={`#${name}`}>#{name}</a>{" "}
+        <li className="channel-name" key={`${name[CHANNEL_NAME] + getRandomNumber() + i}`}>
+          <a href={`#${name[CHANNEL_ID]}`}>#{name[CHANNEL_NAME]}</a>{" "}
         </li>
       ))
     );
-    setChannelTypeRender(evt.target.id);
+
   };
 
   const onClickSignout = () => {
@@ -41,6 +52,9 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     localStorage.removeItem("client");
     localStorage.removeItem("expiry");
     localStorage.removeItem("uid");
+    localStorage.removeItem("firstname");
+    localStorage.removeItem("lastname");
+    localStorage.removeItem("id");
     navigate("/");
   };
 
@@ -61,28 +75,80 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
       if (!res.data.data) return;
       const channelsFetch = [];
       res.data.data.forEach((data) => {
-        channelsFetch.push(data.name);
+        axios({
+          method: "GET",
+          url: `${process.env.BASEURL}messages?receiver_id=${data.id}&receiver_class=Channel`,
+          headers: {
+            ["access-token"]: localStorage.getItem("access-token"),
+            ["client"]: localStorage.getItem("client"),
+            ["expiry"]: localStorage.getItem("expiry"),
+            ["uid"]: localStorage.getItem("uid"),
+          },
+        }).then((res) => {
+          const messages = [];
+          res.data.data.forEach(data => {
+            if(data.body) messages.push(data.body);
+          })
+          channelsFetch.push([data.name, data.id, [...messages]]);
+        });
       });
       setChannel((prevChannel) => ({ ...prevChannel, text: channelsFetch }));
     });
   };
 
-  const getChannelsMessages = () => {
-    const userID = localStorage.getItem("id")
+  const getChannelsMessages = (channelID) => {
     axios({
       method: "GET",
-      url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=Channel`,
+      url: `${process.env.BASEURL}messages?receiver_id=${channelID}&receiver_class=Channel`,
       headers: {
         ["access-token"]: localStorage.getItem("access-token"),
         ["client"]: localStorage.getItem("client"),
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    }).then((res) => {
-      console.log(res);
-    });
+    })
+
+    // getChannels();
   };
 
+  const onSubmitSendChannelMessage = (evt) => {
+    evt.preventDefault();
+
+    const message = evt.target["message"].value;
+    const channelID = evt
+      .target["message"]
+      .parentElement
+      .parentElement
+      .parentElement
+      .parentElement
+      .id;
+
+    axios({
+      method: "POST",
+      url: `${process.env.BASEURL}messages?receiver_id=${channelID}&receiver_class=Channel&body=${message}`,
+      headers: {
+        ["access-token"]: localStorage.getItem("access-token"),
+        ["client"]: localStorage.getItem("client"),
+        ["expiry"]: localStorage.getItem("expiry"),
+        ["uid"]: localStorage.getItem("uid"),
+      },
+    })
+
+    setChannel((prevChannel) => {
+      prevChannel.text.forEach((channelInfo) => {
+        if(channelInfo[CHANNEL_ID] == channelID) {
+          channelInfo[CHANNEL_MESSAGES].push(message);
+          return {...prevChannel};
+        }
+      })
+      return { ...prevChannel };
+    });
+
+    getChannelsMessages(channelID);
+
+    // reset input message
+    evt.target["message"].value = "";
+  };
 
   // fetching of directe messages
   const getDirects = () => {
@@ -98,10 +164,11 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
           ["uid"]: localStorage.getItem("uid"),
         },
       }).then((res) => {
+        console.log(res);
         if (res.data.data !== undefined) {
           const receiver = [];
           res.data.data.forEach((data) => {
-            receiver.push(data.receiver.uid);
+            receiver.push([data.receiver.uid, data.id, [data.body]]);
           });
           setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
         }
@@ -114,16 +181,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     evt.preventDefault();
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
-    axios({
-      method: "POST",
-      url: `${process.env.BASEURL}channels?name=${channelName}&user_ids=[${user}]`,
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    }).catch(() => {
+    try {
       axios({
         method: "POST",
         url: `${process.env.BASEURL}channels?name=${channelName}&user_ids=[${user}]`,
@@ -133,9 +191,12 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
           ["expiry"]: localStorage.getItem("expiry"),
           ["uid"]: localStorage.getItem("uid"),
         },
+      }).catch(() => {
+        getChannels();
       });
-      getChannels();
-    });
+    } catch {
+        getChannels();
+    }
   }, [channel.text.length]);
 
   const onClickAdd = () => setIsAdding(true);
@@ -144,16 +205,14 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   useEffect(() => {
     getChannels();
     getDirects();
-    getChannelsMessages();
   }, []);
 
-  const FIRST_LETTER = 0;
   return (
     <main className="chat">
       <nav className="account" aria-label="account-info">
         <span className="profile">
-          { localStorage.getItem("firstname")[FIRST_LETTER] }
-          { localStorage.getItem("lastname")[FIRST_LETTER] }
+          {/* { localStorage.getItem("lastname")[FIRST_LETTER] || ""} */}
+          {/* { localStorage.getItem("firstname")[FIRST_LETTER] || "N"} */}
         </span>
         <ul className="account-info">
           <li>Friends</li>
@@ -167,20 +226,24 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         {/* render channels here */}
         {/* filler */}
         <div className="chat-room-filler"></div>
-        {channel[channelTypeRender].map((channelName, i) => (
-          <div className="chat-room" key={channelName + i} id={channelName}>
-            <h2>{channelName}</h2>
+        {channel[channelTypeRender].map((channelInfo, i) => (
+          <div className="chat-room" key={channelInfo[CHANNEL_ID] + getRandomNumber() + i} id={channelInfo[CHANNEL_ID]}>
+            <h2>{channelInfo[CHANNEL_NAME]}</h2>
             <div className="chat-box">
-              <div className="chat-messages">messages</div>
-              <form className="message-form">
+              <ul className="messages-container">
+                {
+                  channelInfo[CHANNEL_MESSAGES].map((message, j) => <li key={message + getRandomNumber() + j}>{message}</li> )
+                }
+              </ul>
+              <form className="messages-form" onSubmit={onSubmitSendChannelMessage}>
                 <div>
                   <input type="text" className="message" id="message" name="message"/>
-                  <label htmlFor="message">Send</label> 
+                  <button>send</button>
                 </div>
               </form>
             </div>
           </div>
-        ))}
+        ))} 
         {/* filler */}
         <div className="chat-room-filler"></div>
       </div>
