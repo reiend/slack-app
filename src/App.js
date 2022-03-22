@@ -43,31 +43,30 @@ const App = () => {
   useEffect(async () => {
     if (localStorage.getItem("access-token") == undefined) {
       completeLoad();
-      return;
+    } else {
+      const getUserInfo = async () => {
+        axios({
+          method: "get",
+          url: `${process.env.BASEURL}users`,
+          headers: {
+            ["access-token"]: localStorage.getItem("access-token"),
+            ["client"]: localStorage.getItem("client"),
+            ["expiry"]: localStorage.getItem("expiry"),
+            ["uid"]: localStorage.getItem("uid"),
+          },
+        }).then((res) => {
+          res.data.data.forEach((user) => {
+            setUsersList((prevUsersList) => [...prevUsersList, user.email]);
+            completeLoad();
+          });
+          res.data.data.forEach((user) => {
+            setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
+            completeLoad();
+          });
+        });
+      };
+      await getUserInfo();
     }
-
-    const getUserInfo = async () => {
-      axios({
-        method: "get",
-        url: `${process.env.BASEURL}/users`,
-        headers: {
-          ["access-token"]: localStorage.getItem("access-token"),
-          ["client"]: localStorage.getItem("client"),
-          ["expiry"]: localStorage.getItem("expiry"),
-          ["uid"]: localStorage.getItem("uid"),
-        },
-      }).then((res) => {
-        res.data.data.forEach((user) => {
-          setUsersList((prevUsersList) => [...prevUsersList, user.email]);
-          completeLoad();
-        });
-        res.data.data.forEach((user) => {
-          setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
-          completeLoad();
-        });
-      });
-    };
-    await getUserInfo();
   }, []);
 
   return (

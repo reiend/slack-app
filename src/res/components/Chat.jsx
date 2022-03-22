@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DirectMessage from "@components/DirectMessage.jsx";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Chat.scss";
 
-const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
+const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   const navigate = useNavigate();
 
   const [channel, setChannel] = useState({
@@ -27,7 +27,11 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
       [FIRST_WORD].toLowerCase();
     const channelNames = channel[channelType];
     setExpandedInfo(
-      channelNames.map((name, i) => <li className="channel-name" key={`${name}-${i}`}><a href={`#${name}`}>#{name}</a> </li>)
+      channelNames.map((name, i) => (
+        <li className="channel-name" key={`${name}-${i}`}>
+          <a href={`#${name}`}>#{name}</a>{" "}
+        </li>
+      ))
     );
     setChannelTypeRender(evt.target.id);
   };
@@ -43,7 +47,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
   // fetching of channels
-  const getChannels = async () => {
+  const getChannels = () => {
     axios({
       method: "GET",
       url: `${process.env.BASEURL}channels?`,
@@ -63,14 +67,8 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
     });
   };
 
-  const getChannelsMessages = async () => {
-    // console.log((localStorage.getItem("uid")));
-    // console.log(usersList);
-    // console.log(usersList.indexOf(localStorage.getItem("uid")));
-    const userEmailIndex = uid? uid : usersList.indexOf(localStorage.getItem("uid"));
-    const userID = usersListID[userEmailIndex];
-    // console.log(userEmailIndex);
-    // console.log(usersListID);
+  const getChannelsMessages = () => {
+    const userID = localStorage.getItem("id")
     axios({
       method: "GET",
       url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=Channel`,
@@ -80,37 +78,39 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    }).then((res)=> {
+    }).then((res) => {
       console.log(res);
     });
   };
 
+
   // fetching of directe messages
-  const getDirects = async () => {
-    const userEmailIndex = (usersList.indexOf(uid));
-    const userID = usersListID[userEmailIndex];
-    axios({
-      method: "GET",
-      url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    }).then((res)=> {
-      if(res.data.data !== undefined) {
-        const receiver = [];
-        res.data.data.forEach((data) => {
-          receiver.push(data.receiver.uid);
-        });
-        setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
-      }
-    });
+  const getDirects = () => {
+    const userID = localStorage.getItem("id");
+    if(userID) {
+      axios({
+        method: "GET",
+        url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
+        headers: {
+          ["access-token"]: localStorage.getItem("access-token"),
+          ["client"]: localStorage.getItem("client"),
+          ["expiry"]: localStorage.getItem("expiry"),
+          ["uid"]: localStorage.getItem("uid"),
+        },
+      }).then((res) => {
+        if (res.data.data !== undefined) {
+          const receiver = [];
+          res.data.data.forEach((data) => {
+            receiver.push(data.receiver.uid);
+          });
+          setChannel((prevChannel) => ({ ...prevChannel, direct: receiver }));
+        }
+      });
+    }
   };
 
   // for adding channel or friends
-  const onSubmitAdd = (evt) => {
+  const onSubmitAdd = useCallback((evt) => {
     evt.preventDefault();
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
@@ -133,25 +133,28 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
           ["expiry"]: localStorage.getItem("expiry"),
           ["uid"]: localStorage.getItem("uid"),
         },
-      })
+      });
       getChannels();
-    })
-  };
+    });
+  }, [channel.text.length]);
 
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
-  useEffect(async () => {
-    await getChannels();
-    await getChannelsMessages();
-    await getChannelsMessages();
-    await getDirects();
-  }, [channel.text.length, channelTypeRender, channel.direct.length]);
+  useEffect(() => {
+    getChannels();
+    getDirects();
+    getChannelsMessages();
+  }, []);
 
+  const FIRST_LETTER = 0;
   return (
     <main className="chat">
       <nav className="account" aria-label="account-info">
-        <span className="profile">JL</span>
+        <span className="profile">
+          { localStorage.getItem("firstname")[FIRST_LETTER] }
+          { localStorage.getItem("lastname")[FIRST_LETTER] }
+        </span>
         <ul className="account-info">
           <li>Friends</li>
           <li>Settings</li>
@@ -167,7 +170,15 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         {channel[channelTypeRender].map((channelName, i) => (
           <div className="chat-room" key={channelName + i} id={channelName}>
             <h2>{channelName}</h2>
-            <div className="chat-box">messages</div>
+            <div className="chat-box">
+              <div className="chat-messages">messages</div>
+              <form className="message-form">
+                <div>
+                  <input type="text" className="message" id="message" name="message"/>
+                  <label htmlFor="message">Send</label> 
+                </div>
+              </form>
+            </div>
           </div>
         ))}
         {/* filler */}
@@ -187,7 +198,12 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
           aria-label="channel-Info"
         >
           {Object.keys(channel).map((type) => (
-            <h2 className="channel-type" onClick={onClickChannelInfoExpand} key={type} id={type}>
+            <h2
+              className="channel-type"
+              onClick={onClickChannelInfoExpand}
+              key={type}
+              id={type}
+            >
               {type} channel
             </h2>
           ))}
@@ -212,8 +228,8 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
 
       {/* form for adding channels and friends*/}
 
-      {isAdding && channelTypeRender === "text"  && (
-        <form className="add" onSubmit={onSubmitAdd} >
+      {isAdding && channelTypeRender === "text" && (
+        <form className="add" onSubmit={onSubmitAdd}>
           <div className="input-add-channel-container">
             <label htmlFor="add-channel" className="add-channel-label">
               Channel
@@ -247,9 +263,16 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID}) => {
         </form>
       )}
 
-      {isAdding && channelTypeRender === "direct"  && 
-        <DirectMessage usersList={usersList} usersListID={usersListID} onClickCancelAdd={onClickCancelAdd} setChannel={setChannel}/>
-      }
+      {isAdding && channelTypeRender === "direct" && (
+        <DirectMessage
+          usersList={usersList}
+          usersListID={usersListID}
+          onClickCancelAdd={onClickCancelAdd}
+          setChannel={setChannel}
+          channel={channel}
+          getDirects={getDirects}
+        />
+      )}
       {/* backdrop for adding channel and friends*/}
       {isAdding && <div className="adding-backdrop"></div>}
     </main>
