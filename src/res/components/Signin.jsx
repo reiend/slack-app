@@ -51,7 +51,7 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
         // localStorage.setItem("lastname", );
 
         navigate("/chat");
-        toast(`Welcome back!`, {
+        toast.success(`Welcome back!`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,

@@ -7,13 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-const Signup = ({
-  setAccessToken,
-  setClient,
-  setExpiry,
-  setUID,
-}) => {
-
+const Signup = ({ setAccessToken, setClient, setExpiry, setUID }) => {
   const [hasInputFirstname, setHasInputFirstname] = useState(false);
   const [hasInputLastname, setHasInputLastname] = useState(false);
   const [hasInputEmailSignup, setHasInputEmailSignup] = useState(false);
@@ -72,14 +66,13 @@ const Signup = ({
         localStorage.setItem("uid", res.headers["uid"]);
 
         navigate("/chat");
-
       })
       .catch((error) => {
         if (error.response) {
           console.log(error.response.data.errors.full_messages[0]);
           console.log(error.response.status);
           const errorMSG = error.response.data.errors.full_messages[0];
-          toast(`${errorMSG}!`, {
+          toast.error(`${errorMSG}!`, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
