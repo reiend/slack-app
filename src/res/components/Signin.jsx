@@ -66,7 +66,7 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
           console.log(error.response.data.errors[0]);
           console.log(error.response.status);
           const errorMSG = error.response.data.errors[0];
-          toast(`${errorMSG}!`, {
+          toast.error(`${errorMSG}!`, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
