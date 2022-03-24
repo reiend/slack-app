@@ -1,0 +1,69 @@
+@use "./Chat.scss" as *;
+@import "~@reiend/quirk";
+
+.add {
+  @extend .bg--green-L3;
+  @extend .p2;
+  @extend .row;
+  @extend .br2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+  max-height: 400px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+}
+
+.add-channel-label {
+  @extend .txt--white;
+  font-size: 1.6rem;
+}
+.add-user-label {
+  @extend .add-channel-label;
+}
+
+.input-add-channel-container {
+  @extend .xxs_-col10;
+  @extend .mb1;
+}
+
+.input-add-user-container {
+  @extend .input-add-channel-container;
+}
+
+.input-channel {
+  @extend .p1;
+  @extend .mt2;
+  @extend .br2;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.input-user {
+  @extend .input-channel;
+}
+
+.submit-add {
+  @extend .xxs_-col10;
+  @extend .mb2;
+  @extend .btn--sld-green-L10;
+  @extend .my2;
+  @extend .py1;
+  @extend .px2;
+  font-size: 1.2rem;
+}
+
+.cancel-add {
+  @extend .xxs_-col10;
+  @extend .btn--sld-red-L5;
+  @extend .my2;
+  @extend .py1;
+  @extend .px2;
+  font-size: 1.2rem;
+}

@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import DirectMessage from "@components/DirectMessage.jsx";
+import CreateChannel from "@components/CreateChannel.jsx";
+import ChannelTab from "@components/ChannelTab.jsx";
+import ChatBox from "@components/ChatBox.jsx";
+import Navbar  from "@components/Navbar.jsx";
+import {CHANNEL_ID, CHANNEL_NAME, CHANNEL_MESSAGES} from "@globals/constants.js"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import "./Chat.scss";
-
-const FIRST_LETTER = 0;
-const CHANNEL_NAME = 0;
-const CHANNEL_ID = 1;
-const CHANNEL_MESSAGES = 2;
-
-const getRandomNumber = () => Math.floor(Math.random() * 3000);
 
 const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   const navigate = useNavigate();
@@ -35,16 +34,18 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     const channelType = evt.target.innerText
       .split(" ")
       [FIRST_WORD].toLowerCase();
-    const channelNames = channel[channelType];
+    const channelInfos = channel[channelType];
 
     setExpandedInfo(
-      channelNames.map((name, i) => (
-        <li className="channel-name" key={`${name[CHANNEL_NAME] + getRandomNumber() + i}`}>
-          <a href={`#${name[CHANNEL_ID]}`}>#{name[CHANNEL_NAME]}</a>{" "}
+      channelInfos.map((channelInfo, i) => (
+        <li
+          className="channel-name"
+          key={channelInfo[0] + channelInfo[1] + `${i}`}
+        >
+          <a href={`#${channelInfo[0]}`}>#{channelInfo[1]}</a>{" "}
         </li>
       ))
     );
-
   };
 
   const onClickSignout = () => {
@@ -60,9 +61,9 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
 
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
-  // fetching of channels
-  const getChannels = () => {
-    axios({
+  const getChannels = async () => {
+    // get channels
+    await axios({
       method: "GET",
       url: `${process.env.BASEURL}channels?`,
       headers: {
@@ -72,27 +73,40 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         ["uid"]: uid,
       },
     }).then((res) => {
-      if (!res.data.data) return;
-      const channelsFetch = [];
-      res.data.data.forEach((data) => {
-        axios({
-          method: "GET",
-          url: `${process.env.BASEURL}messages?receiver_id=${data.id}&receiver_class=Channel`,
-          headers: {
-            ["access-token"]: localStorage.getItem("access-token"),
-            ["client"]: localStorage.getItem("client"),
-            ["expiry"]: localStorage.getItem("expiry"),
-            ["uid"]: localStorage.getItem("uid"),
-          },
-        }).then((res) => {
-          const messages = [];
-          res.data.data.forEach(data => {
-            if(data.body) messages.push(data.body);
-          })
-          channelsFetch.push([data.name, data.id, [...messages]]);
+      const datas = res.data.data;
+      console.log(datas);
+
+      // get channels messages information
+      if (datas) {
+        datas.forEach(async (data) => {
+          let channelMessages = [];
+          const { id: channelID, name } = data;
+          await axios({
+            method: "GET",
+            url: `${process.env.BASEURL}messages?receiver_id=${channelID}&receiver_class=Channel`,
+            headers: {
+              ["access-token"]: accessToken,
+              ["client"]: client,
+              ["expiry"]: expiry,
+              ["uid"]: uid,
+            },
+          }).then((res) => {
+            const datas = res.data.data;
+
+            // don't store no conversation history
+            if (datas.length) {
+              channelMessages = datas;
+            }
+          });
+
+          // store channel inforation on state
+          setChannel((prevChannel) => {
+            const newChannelInfo = [channelID, name, channelMessages];
+            prevChannel.text.push(newChannelInfo);
+            return { ...prevChannel };
+          });
         });
-      });
-      setChannel((prevChannel) => ({ ...prevChannel, text: channelsFetch }));
+      }
     });
   };
 
@@ -106,7 +120,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    })
+    });
 
     // getChannels();
   };
@@ -115,13 +129,9 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     evt.preventDefault();
 
     const message = evt.target["message"].value;
-    const channelID = evt
-      .target["message"]
-      .parentElement
-      .parentElement
-      .parentElement
-      .parentElement
-      .id;
+    const channelID =
+      evt.target["message"].parentElement.parentElement.parentElement
+        .parentElement.id;
 
     axios({
       method: "POST",
@@ -132,15 +142,15 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    })
+    });
 
     setChannel((prevChannel) => {
       prevChannel.text.forEach((channelInfo) => {
-        if(channelInfo[CHANNEL_ID] == channelID) {
+        if (channelInfo[CHANNEL_ID] == channelID) {
           channelInfo[CHANNEL_MESSAGES].push(message);
-          return {...prevChannel};
+          return { ...prevChannel };
         }
-      })
+      });
       return { ...prevChannel };
     });
 
@@ -153,7 +163,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
   // fetching of directe messages
   const getDirects = () => {
     const userID = localStorage.getItem("id");
-    if(userID) {
+    if (userID) {
       axios({
         method: "GET",
         url: `${process.env.BASEURL}messages?receiver_id=${userID}&receiver_class=User`,
@@ -164,7 +174,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
           ["uid"]: localStorage.getItem("uid"),
         },
       }).then((res) => {
-        console.log(res);
         if (res.data.data !== undefined) {
           const receiver = [];
           res.data.data.forEach((data) => {
@@ -176,15 +185,16 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     }
   };
 
-  // for adding channel or friends
-  const onSubmitAdd = useCallback((evt) => {
+  const onSubmitAdd = async (evt) => {
     evt.preventDefault();
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
+
     try {
-      axios({
+      await axios({
         method: "POST",
         url: `${process.env.BASEURL}channels?name=${channelName}&user_ids=[${user}]`,
+        mode: "no-cors",
         headers: {
           ["access-token"]: localStorage.getItem("access-token"),
           ["client"]: localStorage.getItem("client"),
@@ -194,138 +204,50 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
       }).catch(() => {
         getChannels();
       });
-    } catch {
-        getChannels();
+    } catch (err) {
+      getChannels();
     }
-  }, [channel.text.length]);
+  };
 
   const onClickAdd = () => setIsAdding(true);
   const onClickCancelAdd = () => setIsAdding(false);
 
   useEffect(() => {
     getChannels();
-    getDirects();
   }, []);
 
   return (
     <main className="chat">
-      <nav className="account" aria-label="account-info">
-        <span className="profile">
-          {/* { localStorage.getItem("lastname")[FIRST_LETTER] || ""} */}
-          {/* { localStorage.getItem("firstname")[FIRST_LETTER] || "N"} */}
-        </span>
-        <ul className="account-info">
-          <li>Friends</li>
-          <li>Settings</li>
-          <li id="logout" onClick={onClickSignout}>
-            Signout
-          </li>
-        </ul>
-      </nav>
-      <div className="chat-room-container">
-        {/* render channels here */}
-        {/* filler */}
-        <div className="chat-room-filler"></div>
-        {channel[channelTypeRender].map((channelInfo, i) => (
-          <div className="chat-room" key={channelInfo[CHANNEL_ID] + getRandomNumber() + i} id={channelInfo[CHANNEL_ID]}>
-            <h2>{channelInfo[CHANNEL_NAME]}</h2>
-            <div className="chat-box">
-              <ul className="messages-container">
-                {
-                  channelInfo[CHANNEL_MESSAGES].map((message, j) => <li key={message + getRandomNumber() + j}>{message}</li> )
-                }
-              </ul>
-              <form className="messages-form" onSubmit={onSubmitSendChannelMessage}>
-                <div>
-                  <input type="text" className="message" id="message" name="message"/>
-                  <button>send</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        ))} 
-        {/* filler */}
-        <div className="chat-room-filler"></div>
-      </div>
-      <div
-        className={
-          !isExpanded
-            ? "channel-info-container"
-            : "channel-info-container channel-info-container-expanded"
-        }
-      >
-        <nav
-          className={
-            !isExpanded ? "channel-info" : "channel-info channel-info-expanded"
-          }
-          aria-label="channel-Info"
-        >
-          {Object.keys(channel).map((type) => (
-            <h2
-              className="channel-type"
-              onClick={onClickChannelInfoExpand}
-              key={type}
-              id={type}
-            >
-              {type} channel
-            </h2>
-          ))}
-        </nav>
-        {isExpanded && (
-          <ul className="channel-name-container"> {expandedInfo} </ul>
-        )}
-        {isExpanded && (
-          <span
-            className="close-channel-expand"
-            onClick={onClickCloseChannelExpand}
-          >
-            ❌
-          </span>
-        )}
-        {isExpanded && (
-          <span className="add-channel" onClick={onClickAdd}>
-            +
-          </span>
-        )}
-      </div>
+
+      {/* for navigating friends, settings and signout */}
+      <Navbar onClickSignOut={onClickSignout}/>
+
+      {/* where chatting/usapp lies */}
+      <ChatBox
+        channel={channel}
+        channelTypeRender={channelTypeRender}
+        onSubmitSendChannelMessage={onSubmitSendChannelMessage}
+      />
+
+      {/* Channel information tab */}
+      <ChannelTab
+        channel={channel}
+        onClickChannelInfoExpand={onClickChannelInfoExpand}
+        isExpanded={isExpanded}
+        onClickCloseChannelExpand={onClickCloseChannelExpand}
+        expandedInfo={expandedInfo}
+        onClickAdd={onClickAdd}
+      />
 
       {/* form for adding channels and friends*/}
-
       {isAdding && channelTypeRender === "text" && (
-        <form className="add" onSubmit={onSubmitAdd}>
-          <div className="input-add-channel-container">
-            <label htmlFor="add-channel" className="add-channel-label">
-              Channel
-            </label>
-            <input
-              type="text"
-              className="input-channel"
-              name="add-channel"
-              id="add-channel"
-            />
-          </div>
-
-          <div className="input-add-user-container">
-            <label htmlFor="add-user" className="add-user-label">
-              User ID:{" "}
-            </label>
-            <input
-              type="text"
-              className="input-user"
-              name="add-user"
-              id="add-user"
-            />
-          </div>
-
-          <button className="submit-add" type="submit">
-            save
-          </button>
-          <button className="cancel-add" onClick={onClickCancelAdd}>
-            cancel
-          </button>
-        </form>
+        <CreateChannel
+          onSubmitAdd={onSubmitAdd}
+          onClickCancelAdd={onClickCancelAdd}
+        />
       )}
 
+      {/* sending direct messages */}
       {isAdding && channelTypeRender === "direct" && (
         <DirectMessage
           usersList={usersList}
@@ -336,7 +258,8 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
           getDirects={getDirects}
         />
       )}
-      {/* backdrop for adding channel and friends*/}
+
+      {/* backdrop for modals*/}
       {isAdding && <div className="adding-backdrop"></div>}
     </main>
   );

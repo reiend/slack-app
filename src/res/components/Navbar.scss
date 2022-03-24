@@ -1,0 +1,125 @@
+@use "./Chat.scss" as *;
+@import "~@reiend/quirk";
+
+/* navigation */
+.chat {
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  max-height: 1200px;
+  @include xxs {
+    padding: 0;
+
+  }
+  @include m {
+    padding: 0 2rem;
+  }
+}
+
+.account {
+  @include xxs {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: #89e0c0;
+    margin-left: auto;
+    height: 10vh;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+  }
+  @include m {
+    /* @extend .px2; */
+    /* @extend .bg--green-L10; */
+    /* @extend .br2; */
+    padding: 2rem 0;
+    background-color: #89e0c0;
+    border-radius: 5px;
+    width: 47.5vw;
+    margin-left: auto;
+    height: 10vh;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+}
+
+.profile {
+  @include xxs {
+    font-size: 2.6rem;
+    /* @extend .fsz3; */
+    /* @extend .bg--green-L3; */
+    /* @extend .txt--black; */
+    background-color: #3bcf93;
+    color: #100C08;
+    text-align: center;
+    padding: 0.3rem;
+    position: relative;
+    border-radius: 50%;
+    width: 3.8rem;
+    height: 3.8rem;
+    max-width: 3.8rem;
+    max-height: 3.8rem;
+    text-align: center;
+    width: 20%;
+    margin-right: 1rem;
+  }
+
+  @include m {
+    font-size: 2.8rem;
+    /* @extend .fsz3; */
+    /* @extend .bg--green-L3; */
+    /* @extend .txt--black; */
+    background-color: #3bcf93;
+    color: #100C08;
+    text-align: center;
+    padding: 0.3rem;
+    position: relative;
+    border-radius: 50%;
+    width: 3.8rem;
+    height: 3.8rem;
+    max-width: 3.8rem;
+    max-height: 3.8rem;
+    text-align: center;
+    width: 20%;
+    margin-right: 1rem;
+  }
+}
+
+.account-info {
+  display: flex;
+  justify-content: space-evenly;
+
+  width: 80%;
+  li {
+    @extend .txt--black;
+    @include xxs {
+      list-style: none;
+      font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+    }
+    @include s {
+      font-size: clamp(1rem, 1.9vw, 1.2rem);
+      list-style: none;
+      cursor: pointer;
+        &:hover {
+          color: #666;
+      }
+    }
+  }
+}
+
+#logout {
+  @include xxs {
+    margin-left: none;
+  }
+
+  @include l {
+    margin-left: 6rem;
+  }
+}
+
+/* end of navigation */
