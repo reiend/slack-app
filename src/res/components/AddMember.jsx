@@ -7,8 +7,13 @@ const AddMember = ({
 
   const onClickCloseAddMember = () => setIsAddingMember(false);
 
+  const onSubmitAddMember = (evt) => {
+    evt.preventDefault();
+    console.log(evt.target["add-member"].value);
+  };
+
   return (
-    <form className="add-member-form">
+    <form className="add-member-form" onSubmit={onSubmitAddMember}>
       <div className="input-add-member-container">
         <label htmlFor="add-member" className="add-member-label">
           Add member

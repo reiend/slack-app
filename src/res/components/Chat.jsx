@@ -221,7 +221,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
     <main className="chat">
 
       {/* for navigating friends, settings and signout */}
-      <Navbar onClickSignOut={onClickSignout}/>
+      <Navbar onClickSignout={onClickSignout}/>
 
       {/* where chatting/usapp lies */}
       <ChatBox
