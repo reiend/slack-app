@@ -1,4 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import Backdrop from "@components/Backdrop.jsx";
+import AddMember from "@components/AddMember.jsx";
+import ChatBoxOptions from "@components/ChatBoxOptions.jsx";
 import "./ChatBox.scss";
 
 const ChatBox = ({
@@ -6,10 +9,10 @@ const ChatBox = ({
   channelTypeRender,
   onSubmitSendChannelMessage,
 }) => {
-
+  const [isAddingMember, setIsAddingMember] = useState(false);
 
   const onClickIsAddMember = () => {
-    console.log("add member");
+    setIsAddingMember(true);
   };
 
   return (
@@ -27,31 +30,19 @@ const ChatBox = ({
           <h2>{channelInfo[1]}</h2>
           <div className="chat-box">
             <ul className="messages-container"></ul>
-
-            <button onClick={onClickIsAddMember}>add member</button>
-
-            <form
-              className="messages-form"
-              onSubmit={onSubmitSendChannelMessage}
-            >
-              <div>
-                <input
-                  type="text"
-                  className="message"
-                  id="message"
-                  name="message"
-                />
-                <button>send</button>
-              </div>
-            </form>
+            <ChatBoxOptions
+              onSubmitSendChannelMessage={onSubmitSendChannelMessage}
+              onClickIsAddMember={onClickIsAddMember}
+            />
           </div>
         </div>
       ))}
       {/* filler */}
       <div className="chat-room-filler"></div>
+      {isAddingMember && <AddMember setIsAddingMember={setIsAddingMember} />}
+      {isAddingMember && <Backdrop />}
     </div>
   );
 };
 
 export default ChatBox;
-
