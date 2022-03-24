@@ -1,0 +1,12 @@
+const FIRST_LETTER = 0;
+const CHANNEL_ID = 0;
+const CHANNEL_NAME = 1;
+const CHANNEL_MESSAGES = 2;
+
+export {
+  FIRST_LETTER,
+  CHANNEL_ID,
+  CHANNEL_NAME,
+  CHANNEL_MESSAGES,
+}
+
