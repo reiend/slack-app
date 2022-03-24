@@ -35,6 +35,7 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
       })
       .then((res) => {
         // use res headers here on the corresponding setters
+        console.log(res);
         setAccessToken(res.headers["access-token"]);
         setClient(res.headers["client"]);
         setExpiry(res.headers["expiry"]);
@@ -50,7 +51,7 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
         // localStorage.setItem("lastname", );
 
         navigate("/chat");
-        toast(`Welcome back!`, {
+        toast.success(`Welcome back!`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -59,6 +60,23 @@ const Signin = ({ setAccessToken, setClient, setExpiry, setUID }) => {
           draggable: true,
           progress: undefined,
         });
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data.errors[0]);
+          console.log(error.response.status);
+          const errorMSG = error.response.data.errors[0];
+          toast.error(`${errorMSG}!`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(error.response.headers);
+        }
       });
   };
 
