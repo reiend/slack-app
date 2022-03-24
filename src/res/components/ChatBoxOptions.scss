@@ -1,0 +1,100 @@
+@use "./Chat.scss" as *;
+
+.chatbox-options-container {
+  width: 100%;
+  display: flex;
+  padding-bottom: 0.5rem;
+
+  @include xxs {
+    height: 20%;
+  }
+  @include xs {
+    height: 10%;
+  }
+  justify-content: space-between;
+}
+
+.add-member-button {
+  position: absolute;
+  left: 1rem;
+  background-color: transparent; 
+  border: none; 
+  font-size: 1.8rem;
+  @extend .txt--white;
+  cursor: pointer;
+
+  @include xxs {
+    bottom: 20.5%;
+  }
+
+  @include xs {
+    bottom: 11%;
+  }
+}
+
+
+.message-form {
+  @extend .xxs_-col10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  @include xxs {
+    height: 60%;
+  }
+
+  @include xs {
+    height: 100%;
+  }
+}
+
+.message-input {
+  @extend .br2;
+  @extend .bg--white;
+  @extend %scroll-bar;
+  height: 100%;
+  font-size: 1.2rem;
+  padding: 0.2rem;
+  border: none;
+  resize: none;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+
+  @include xxs {
+    width: 100%;
+  }
+  @include xs {
+    width: 70%;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @extend .bg--green-L3;
+    @extend .br2;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    @extend .bg--green-L5;
+  }
+}
+
+.message-button-send {
+  @extend .xxs_-col2;
+  @extend .br2;
+  @extend .btn--sld-green-L3;
+  font-size: 1.3rem;
+  padding: 0.2rem 0.3rem; 
+  height: 100%;
+
+  @include xxs {
+    width: 100%;
+    margin-top: 0.5rem;
+    height: 50%;
+  }
+  @include xs {
+    margin-top: 0;
+    width: 20%;
+    height: 100%;
+  }
+
+}
+

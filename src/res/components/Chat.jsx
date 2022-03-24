@@ -4,6 +4,7 @@ import CreateChannel from "@components/CreateChannel.jsx";
 import ChannelTab from "@components/ChannelTab.jsx";
 import ChatBox from "@components/ChatBox.jsx";
 import Navbar  from "@components/Navbar.jsx";
+import Backdrop  from "@components/Backdrop.jsx";
 import {CHANNEL_ID, CHANNEL_NAME, CHANNEL_MESSAGES} from "@globals/constants.js"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -260,7 +261,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
       )}
 
       {/* backdrop for modals*/}
-      {isAdding && <div className="adding-backdrop"></div>}
+      {isAdding && <Backdrop/> }
     </main>
   );
 };

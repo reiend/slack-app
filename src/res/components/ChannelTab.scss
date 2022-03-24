@@ -1,7 +1,5 @@
 @use "./Chat.scss" as *;
 
-@import "~@reiend/quirk";
-
 .channel-info-container {
   @extend .bg--green-L10;
   @extend .br2;
