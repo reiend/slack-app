@@ -3,6 +3,8 @@ import Signin from "@components/Signin.jsx";
 import Signup from "@components/Signup.jsx";
 import Chat from "@components/Chat.jsx";
 import RequiredAuth from "@components/RequiredAuth.jsx";
+import UserListProvider from "@context/UserListContext.jsx";
+
 import { Routes, Route, Outlet } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -18,8 +20,8 @@ const App = () => {
   const [usersList, setUsersList] = useState([]);
   const [usersListID, setUsersListID] = useState([]);
 
-  const [isHiddenSpinner, setIsHiddenSpinner] = useState(true);
-  const [isHiddenRouteContainer, setIsHiddenRouteContainer] = useState(false);
+  const [isHiddenSpinner, setIsHiddenSpinner] = useState(false);
+  const [isHiddenRouteContainer, setIsHiddenRouteContainer] = useState(true);
 
   const setSignInHeaders = {
     setAccessToken,
@@ -40,35 +42,33 @@ const App = () => {
     setIsHiddenRouteContainer(false);
   };
 
-  // useEffect(async () => {
-  //   if (localStorage.getItem("access-token") == undefined) {
-  //     completeLoad();
-  //   } else {
-  //     const getUserInfo = async () => {
-  //       axios({
-  //         method: "get",
-  //         url: `${process.env.BASEURL}users`,
-  //         headers: {
-  //           ["access-token"]: localStorage.getItem("access-token"),
-  //           ["client"]: localStorage.getItem("client"),
-  //           ["expiry"]: localStorage.getItem("expiry"),
-  //           ["uid"]: localStorage.getItem("uid"),
-  //         },
-  //       }).then((res) => {
-  //         res.data.data.forEach((user) => {
-  //           setUsersList((prevUsersList) => [...prevUsersList, user.email]);
-  //           completeLoad();
-  //         });
-  //         res.data.data.forEach((user) => {
-  //           setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
-  //           completeLoad();
-  //         });
-  //       });
-  //     };
-  //     await getUserInfo();
-  //   }
-  // }, []);
-  //
+  useEffect(async () => {
+    if (localStorage.getItem("access-token") == undefined) {
+      completeLoad();
+    } else {
+      
+     await axios({
+        method: "get",
+        url: `${process.env.BASEURL}users`,
+        headers: {
+          ["access-token"]: localStorage.getItem("access-token"),
+          ["client"]: localStorage.getItem("client"),
+          ["expiry"]: localStorage.getItem("expiry"),
+          ["uid"]: localStorage.getItem("uid"),
+        },
+      }).then((res) => {
+        res.data.data.forEach((user) => {
+          setUsersList((prevUsersList) => [...prevUsersList, user.email]);
+          completeLoad();
+        });
+        res.data.data.forEach((user) => {
+          setUsersListID((prevUsersListID) => [...prevUsersListID, user.id]);
+          completeLoad();
+        });
+      });
+    }
+  }, []);
+  
   return (
     <div className="app-container">
       <div className="spinner" hidden={isHiddenSpinner} />
@@ -85,11 +85,9 @@ const App = () => {
             path="chat"
             element={
               <RequiredAuth>
-                <Chat
-                  {...signInHeaders}
-                  usersList={usersList}
-                  usersListID={usersListID}
-                />
+                <UserListProvider value={{usersList, usersListID}}>
+                  <Chat {...signInHeaders} />
+                </UserListProvider>
               </RequiredAuth>
             }
           />

@@ -26,7 +26,6 @@
   @extend .mb1;
 }
 
-
 .input-member {
   @extend .p1;
   @extend .mt2;
@@ -55,4 +54,31 @@
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   max-height: 50px;
+}
+
+.filter-users-list-container-add-member {
+  @extend %scroll-bar;
+  @extend .bg--green-L10;
+  @extend .br2;
+  @extend .p3;
+
+  position: absolute;
+  bottom: -145%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  height: 100%;
+  max-height: 400px;
+  width: 100%;
+  max-width: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y-mandatory;
+  li {
+    list-style: none;
+    font-size: 1rem;
+    cursor: pointer;
+    @extend .mb1;
+    @extend .bg-_onH--green-L3;
+  }
 }
