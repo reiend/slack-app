@@ -73,7 +73,6 @@ const ChatBox = ({
         <AddMember
           setIsAddingMember={setIsAddingMember}
           channelID={channelID}
-          messageContainerRef={messageContainerRef}
         />
       )}
       {isAddingMember && <Backdrop />}
