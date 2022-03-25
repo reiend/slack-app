@@ -5,21 +5,22 @@
   @extend .br2;
   @extend .p2;
   height: 10vh;
-
+  max-height: 150px;
   @include xxs {
     width: 100%;
   }
 
   @include m {
-    width: 47.5vw;
+    max-width: 50%;
   }
 }
 
 .channel-info-container-expanded {
   background-color: #3bcf93;
-  position: absolute;
+  position: relative;
   height: 40vh;
-  bottom: -11vh;
+  max-height: 300px;
+  bottom: 14rem;
 }
 
 /* channel info */

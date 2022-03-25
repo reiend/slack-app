@@ -1,16 +1,14 @@
 @import "~@reiend/quirk";
 
 .app-container {
-  /* display: grid; */
-  /* place-items: center; */
-  /* position: relative; */
-  /* top: 0; */
-  /* left: 0; */
-  /* bottom: 0; */
-  /* right: 0; */
-  min-height: 100vh;
   overflow-y: hidden;
+  max-width: 1600px;
+  max-height: 800px;
+  height: 100vh;
+  margin: 0 auto;
+
 }
+
 
 .router-container {
   height: 100%;

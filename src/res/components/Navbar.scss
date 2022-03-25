@@ -16,6 +16,7 @@
 }
 
 .account {
+  max-height: 150px;
   @include xxs {
     width: 100%;
     padding: 2rem 0;
@@ -34,6 +35,7 @@
     /* @extend .bg--green-L10; */
     /* @extend .br2; */
     padding: 2rem 0;
+    max-width: 50%;
     background-color: #89e0c0;
     border-radius: 5px;
     width: 47.5vw;
