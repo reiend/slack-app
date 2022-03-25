@@ -14,6 +14,17 @@
   height: 100%;
 }
 
+.user-account {
+  font-size: clamp(2rem, 1rem + 2vw, 4rem);
+  border-radius: 50%;
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @extend .txt--green-L3;
+  text-align: center;
+}
+
 @keyframes spin-loading {
   0% {
     transform: rotate(0deg);
