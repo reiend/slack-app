@@ -24,6 +24,7 @@
   @extend %scroll-bar;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+  width: 100%;
 
   &::-webkit-scrollbar-thumb {
     @extend .bg--green-L10;
@@ -62,14 +63,16 @@
   width: 100%;
 }
 
-.filter-users-list-container {
+.filter-users-list-container-direct {
   @extend %scroll-bar;
   @extend .bg--green-L10;
   @extend .br2;
   @extend .p3;
   position: absolute;
-  bottom: 0%;
-  right: -30rem;
+  bottom: -115%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   height: 100%;
   max-height: 400px;
   width: 100%;

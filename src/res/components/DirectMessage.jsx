@@ -1,10 +1,15 @@
-import React, { useState, useCallback, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useUserListContext } from "@context/UserListContext.jsx";
+
 import axios from "axios";
 import "./DirectMessage.scss";
 
-const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, getDirects, channel}) => {
+const DirectMessage = ({ onClickCancelAdd, setChannel, getDirects }) => {
+
   const [usersListFilter, setUsersListFilter] = useState(null);
+
+  const {usersList, usersListID} = useUserListContext();
+
   const inputReceiverRef = useRef(null);
 
   const onSubmitSend = (evt) => {
@@ -15,6 +20,7 @@ const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, ge
 
     const userEmailIndex = (usersList.indexOf(email));
     const userID = usersListID[userEmailIndex];
+
     // console.log(userID, email);
     axios({
       method: "POST",
@@ -29,6 +35,7 @@ const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, ge
       setChannel((prevChannel) => {
         // console.log(updatedDirects);
         // console.log(res);
+        
         const updatedDirects = [...prevChannel.direct, email];
         const newChannelsInfo = {...prevChannel, direct: updatedDirects};
         return newChannelsInfo;
@@ -50,7 +57,7 @@ const DirectMessage = ({usersList, onClickCancelAdd, setChannel, usersListID, ge
         (user) => user.startsWith(evt.target.value)
       );
       setUsersListFilter(
-        <ul className="filter-users-list-container">
+        <ul className="filter-users-list-container-direct">
           {filteredUser.map((filterUser, i) => (
             <li key={filteredUser + i} onClick={onClickGetUser}>{filterUser}</li>
           ))}

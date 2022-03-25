@@ -5,6 +5,7 @@ const ChatBoxOptions = ({
   onClickIsAddMember,
   onSubmitSendChannelMessage,
 }) => {
+
   return (
     <div className="chatbox-options-container">
       <button className="add-member-button" onClick={onClickIsAddMember} title="add member">+</button>

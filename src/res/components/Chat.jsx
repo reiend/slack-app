@@ -11,7 +11,7 @@ import axios from "axios";
 
 import "./Chat.scss";
 
-const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
+const Chat = ({ accessToken, client, expiry, uid}) => {
   const navigate = useNavigate();
 
   const [channel, setChannel] = useState({
@@ -75,7 +75,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
       },
     }).then((res) => {
       const datas = res.data.data;
-      console.log(datas);
 
       // get channels messages information
       if (datas) {
@@ -94,7 +93,7 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
           }).then((res) => {
             const datas = res.data.data;
 
-            // don't store no conversation history
+            // skip no channel
             if (datas.length) {
               channelMessages = datas;
             }
@@ -251,8 +250,6 @@ const Chat = ({ accessToken, client, expiry, uid, usersList, usersListID }) => {
       {/* sending direct messages */}
       {isAdding && channelTypeRender === "direct" && (
         <DirectMessage
-          usersList={usersList}
-          usersListID={usersListID}
           onClickCancelAdd={onClickCancelAdd}
           setChannel={setChannel}
           channel={channel}

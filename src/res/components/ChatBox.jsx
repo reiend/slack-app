@@ -10,8 +10,12 @@ const ChatBox = ({
   onSubmitSendChannelMessage,
 }) => {
   const [isAddingMember, setIsAddingMember] = useState(false);
+  const [channelID, setChannelID] = useState();
 
-  const onClickIsAddMember = () => {
+
+  const onClickIsAddMember = (evt) => {
+    const presentChannelID = evt.target.parentElement.parentElement.parentElement;
+    setChannelID(presentChannelID);
     setIsAddingMember(true);
   };
 
@@ -39,7 +43,12 @@ const ChatBox = ({
       ))}
       {/* filler */}
       <div className="chat-room-filler"></div>
-      {isAddingMember && <AddMember setIsAddingMember={setIsAddingMember} />}
+      {isAddingMember && (
+        <AddMember
+          setIsAddingMember={setIsAddingMember}
+          channelID={channelID}
+        />
+      )}
       {isAddingMember && <Backdrop />}
     </div>
   );
