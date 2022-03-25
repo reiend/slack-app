@@ -46,8 +46,7 @@ const App = () => {
     if (localStorage.getItem("access-token") == undefined) {
       completeLoad();
     } else {
-      
-     await axios({
+      await axios({
         method: "get",
         url: `${process.env.BASEURL}users`,
         headers: {
@@ -68,24 +67,26 @@ const App = () => {
       });
     }
   }, []);
-  
+
   return (
     <div className="app-container">
       <div className="spinner" hidden={isHiddenSpinner} />
+
+      {localStorage.getItem("access-token") && (
+        <div className="user" hidden={isHiddenSpinner} className="user-account">
+          {" "}
+          Signing as {localStorage.getItem("uid")}
+        </div>
+      )}
       <div className="router-container" hidden={isHiddenRouteContainer}>
         <Routes>
           <Route path="/" element={<Signin {...setSignInHeaders} />} />
-          <Route
-            path="signup"
-            element={
-              <Signup {...setSignInHeaders} />
-            }
-          />
+          <Route path="signup" element={<Signup {...setSignInHeaders} />} />
           <Route
             path="chat"
             element={
               <RequiredAuth>
-                <UserListProvider value={{usersList, usersListID}}>
+                <UserListProvider value={{ usersList, usersListID }}>
                   <Chat {...signInHeaders} />
                 </UserListProvider>
               </RequiredAuth>

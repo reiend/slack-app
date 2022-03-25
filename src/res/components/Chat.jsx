@@ -251,6 +251,7 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
         />
       )}
 
+
       {/* backdrop for modals*/}
       {isAdding && <Backdrop/> }
     </main>

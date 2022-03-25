@@ -32,36 +32,41 @@ const ChatBox = ({
       {/* filler */}
       <div className="chat-room-filler"></div>
 
-      {channel[channelTypeRender].map((channelInfo, i) => (
-        <div
-          className="chat-room"
-          key={channelInfo[CHANNEL_ID] + `${i}`}
-          id={channelInfo[CHANNEL_ID]}
-        >
-          <h2>{channelInfo[CHANNEL_NAME]}</h2>
-          <div className="chat-box">
-            <ul className="messages-container">
-              {channelInfo[CHANNEL_MESSAGES].map(({ id, body, sender }) => (
-                <li
-                  key={id}
-                  className={`${
-                    localStorage.getItem("uid") === sender.email
-                      ? "message-info-sender"
-                      : "message-info"
-                  }`}
-                >
-                  <span className="sender">{sender.email}</span>
-                  <span className="sender-message">{body}</span>
-                </li>
-              ))}
-            </ul>
-            <ChatBoxOptions
-              onSubmitSendChannelMessage={onSubmitSendChannelMessage}
-              onClickIsAddMember={onClickIsAddMember}
-            />
+      {
+        !channel[channelTypeRender].length
+          ? <div className="no-channel-filler">No Channels are created yet</div>
+          : channel[channelTypeRender].map((channelInfo, i) => (
+          <div
+            className="chat-room"
+            key={channelInfo[CHANNEL_ID] + `${i}`}
+            id={channelInfo[CHANNEL_ID]}
+          >
+            <h2>{channelInfo[CHANNEL_NAME]}</h2>
+            <div className="chat-box">
+              <ul className="messages-container">
+                {channelInfo[CHANNEL_MESSAGES].map(({ id, body, sender }) => (
+                  <li
+                    key={id}
+                    className={`${
+                      localStorage.getItem("uid") === sender.email
+                        ? "message-info-sender"
+                        : "message-info"
+                    }`}
+                  >
+                    <span className="sender">{sender.email}</span>
+                    <span className="sender-message">{body}</span>
+                  </li>
+                ))}
+              </ul>
+              <ChatBoxOptions
+                onSubmitSendChannelMessage={onSubmitSendChannelMessage}
+                onClickIsAddMember={onClickIsAddMember}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
+
       {/* filler */}
       <div className="chat-room-filler"></div>
       {isAddingMember && (

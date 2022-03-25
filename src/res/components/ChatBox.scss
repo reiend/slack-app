@@ -139,6 +139,12 @@
   font-size: 1rem;
   font-weight: 300;
 }
+.no-channel-filler {
+  font-size: clamp(2rem, 2rem + 2vw, 5rem);
+  margin: auto;
+  color: #3bcf93;
+  text-align: center;
+}
 
 /* end of chat container */
 
