@@ -31,6 +31,7 @@ const AddMember = ({
       },
     })
 
+
     // clear input to add new memeber
     inputMemberRef.current.value = "";
   };
