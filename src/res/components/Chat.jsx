@@ -63,7 +63,6 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
   const getChannels = async () => {
-    // get channels
     await axios({
       method: "GET",
       url: `${process.env.BASEURL}channels?`,
@@ -75,6 +74,11 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
       },
     }).then((res) => {
       const datas = res.data.data;
+
+      setChannel((prevChannel) => {
+        prevChannel.text = [];
+        return { ...prevChannel };
+      });
 
       // get channels messages information
       if (datas) {
@@ -108,32 +112,22 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
         });
       }
     });
+    console.log(channel.text);
   };
 
-  const getChannelsMessages = (channelID) => {
-    axios({
-      method: "GET",
-      url: `${process.env.BASEURL}messages?receiver_id=${channelID}&receiver_class=Channel`,
-      headers: {
-        ["access-token"]: localStorage.getItem("access-token"),
-        ["client"]: localStorage.getItem("client"),
-        ["expiry"]: localStorage.getItem("expiry"),
-        ["uid"]: localStorage.getItem("uid"),
-      },
-    });
-
-    // getChannels();
-  };
-
-  const onSubmitSendChannelMessage = (evt) => {
+  const onSubmitSendChannelMessage = async (evt) => {
     evt.preventDefault();
+    const target = evt.target;
 
-    const message = evt.target["message"].value;
-    const channelID =
-      evt.target["message"].parentElement.parentElement.parentElement
-        .parentElement.id;
+    const message = target["message-input"].value;
+    const channelID = target["message-input"]
+      .parentElement
+      .parentElement
+      .parentElement
+      .parentElement
+      .id;
 
-    axios({
+    await axios({
       method: "POST",
       url: `${process.env.BASEURL}messages?receiver_id=${channelID}&receiver_class=Channel&body=${message}`,
       headers: {
@@ -142,23 +136,14 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
         ["expiry"]: localStorage.getItem("expiry"),
         ["uid"]: localStorage.getItem("uid"),
       },
-    });
+    })
 
-    setChannel((prevChannel) => {
-      prevChannel.text.forEach((channelInfo) => {
-        if (channelInfo[CHANNEL_ID] == channelID) {
-          channelInfo[CHANNEL_MESSAGES].push(message);
-          return { ...prevChannel };
-        }
-      });
-      return { ...prevChannel };
-    });
+    await getChannels();
 
-    getChannelsMessages(channelID);
-
-    // reset input message
-    evt.target["message"].value = "";
+    // clear message input to enter new message
+    evt.target["message-input"].value = "";
   };
+
 
   // fetching of directe messages
   const getDirects = () => {
@@ -187,6 +172,7 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
 
   const onSubmitAdd = async (evt) => {
     evt.preventDefault();
+    console.log("adding");
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
 
