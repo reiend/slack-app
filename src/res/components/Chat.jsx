@@ -23,7 +23,6 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
   const [channelTypeRender, setChannelTypeRender] = useState("text");
   const [expandedInfo, setExpandedInfo] = useState(false);
   const [isExpanded, setIsExpended] = useState(false);
-  const [currentChannelMessaging, setCurrentChannelMessaging] = useState(0);
 
   // state for adding channel or friend
   const [isAdding, setIsAdding] = useState(false);
@@ -147,18 +146,13 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
       },
     })
 
-    channel.text.forEach((channelInfo, i) => {
-      if(channelInfo[CHANNEL_NAME] === channelName) setCurrentChannelMessaging(
-        ((channel.text)[currentChannelMessaging][CHANNEL_MESSAGES].length)
-      );
-    })
 
     getChannels();
 
     // clear message input to enter new message
     evt.target["message-input"].value = "";
 
-  }, [currentChannelMessaging]);
+  });
 
   // fetching of directe messages
   const getDirects = () => {
