@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DirectMessage from "@components/DirectMessage.jsx";
 import CreateChannel from "@components/CreateChannel.jsx";
 import ChannelTab from "@components/ChannelTab.jsx";
@@ -23,6 +23,7 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
   const [channelTypeRender, setChannelTypeRender] = useState("text");
   const [expandedInfo, setExpandedInfo] = useState(false);
   const [isExpanded, setIsExpended] = useState(false);
+  const [currentChannelMessaging, setCurrentChannelMessaging] = useState(0);
 
   // state for adding channel or friend
   const [isAdding, setIsAdding] = useState(false);
@@ -62,7 +63,7 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
 
   const onClickCloseChannelExpand = () => setIsExpended(false);
 
-  const getChannels = async () => {
+  const getChannels = useCallback(async () => {
     await axios({
       method: "GET",
       url: `${process.env.BASEURL}channels?`,
@@ -112,10 +113,9 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
         });
       }
     });
-    console.log(channel.text);
-  };
+  }, [channel.text.length]);
 
-  const onSubmitSendChannelMessage = async (evt) => {
+  const onSubmitSendChannelMessage = useCallback(async (evt) => {
     evt.preventDefault();
     const target = evt.target;
 
@@ -126,6 +126,15 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
       .parentElement
       .parentElement
       .id;
+
+    const USE_CHANNEL_NAME = 0;
+
+    const channelName = target["message-input"]
+      .parentElement
+      .parentElement
+      .parentElement
+      .parentElement
+      .children[USE_CHANNEL_NAME].innerText;
 
     await axios({
       method: "POST",
@@ -138,12 +147,18 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
       },
     })
 
-    await getChannels();
+    channel.text.forEach((channelInfo, i) => {
+      if(channelInfo[CHANNEL_NAME] === channelName) setCurrentChannelMessaging(
+        ((channel.text)[currentChannelMessaging][CHANNEL_MESSAGES].length)
+      );
+    })
+
+    getChannels();
 
     // clear message input to enter new message
     evt.target["message-input"].value = "";
-  };
 
+  }, [currentChannelMessaging]);
 
   // fetching of directe messages
   const getDirects = () => {
@@ -172,7 +187,6 @@ const Chat = ({ accessToken, client, expiry, uid}) => {
 
   const onSubmitAdd = async (evt) => {
     evt.preventDefault();
-    console.log("adding");
     const channelName = evt.target["add-channel"].value;
     const user = evt.target["add-user"].value;
 
